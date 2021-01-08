@@ -1,0 +1,63 @@
+<ul class="custom-menu menu level-1">
+    {{ $currentPage := . }}
+    {{ range .menu }}
+      {{ if .HasChildren }}
+        <li class="parent {{ .Identifier }}">
+          {{ if .URL }}
+            <a href="{{ .URL }}">
+              {{ .Pre }}
+              {{ .Name }}
+            </a>
+          {{ else }}
+            {{ .Pre }}
+            <span>{{ .Name }}</span>
+          {{ end }}
+          <ul class="menu level-2">
+            {{ range .Children }}
+            <li class=" {{ .Identifier }}">
+              {{ if .URL }}
+                <a href="{{ .URL }}">
+                  {{ .Pre }}
+                  {{ .Name }}
+                </a>
+              {{ else }}
+                {{ .Pre }}
+                <span>{{ .Name }}</span>
+              {{ end }}
+              {{ if .HasChildren }}
+              <div class="divider"></div>
+              <ul class="menu level-3">
+                {{ range .Children }}
+                  <li class=" {{ .Identifier }}">
+                    {{ if .URL }}
+                      <a href="{{ .URL }}">
+                        {{ .Pre }}
+                        {{ .Name }}
+                      </a>
+                    {{ else }}
+                      {{ .Pre }}
+                      <span>{{ .Name }}</span>
+                    {{ end }}
+                  </li>
+                {{ end }}
+                </ul>
+              {{ end }}
+            </li>
+            {{ end }}
+          </ul>
+        </li>
+      {{ else }}
+        <li class="{{ .Identifier }}">
+          {{ if .URL }}
+            <a href="{{ .URL }}">
+              {{ .Pre }}
+              {{ .Name }}
+            </a>
+          {{ else }}
+            {{ .Pre }}
+            <span>{{ .Name }}</span>
+          {{ end }}
+        </li>
+      {{ end }}
+    {{ end }}
+  </ul>

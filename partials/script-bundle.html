@@ -1,0 +1,11 @@
+{{ $scripts := slice }}
+{{ range .source_files }}
+  {{ if strings.HasSuffix . "|babel"}}
+    {{ $path := strings.TrimSuffix "|babel" . }}
+    {{ $scripts = $scripts | append (resources.Get $path | babel) }}
+  {{ else }}
+    {{ $scripts = $scripts | append (resources.Get . ) }}
+  {{ end }}
+{{ end }}
+{{ $js := $scripts | resources.Concat .output_path }}
+<script type="text/javascript" src="{{ $js.RelPermalink }}"></script>

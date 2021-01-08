@@ -1,0 +1,25 @@
+{{ $gallery_path := (.Get "gallery_path") }}
+{{ $class := (.Get "class") }}
+{{ $gallery_path_static := printf "%s%s" "static" $gallery_path }}
+{{ $cloned_gallery_path := replace $gallery_path "images" "_image-clones" }}
+{{ $cloned_gallery_path_static := replace $gallery_path_static "images" "_image-clones" }}
+{{ if fileExists $cloned_gallery_path_static }}
+  {{ .Scratch.Set "static_path" $cloned_gallery_path_static }}
+  {{ .Scratch.Set "path" $cloned_gallery_path }}
+{{ else }}
+  {{ .Scratch.Set "static_path" $gallery_path_static }}
+  {{ .Scratch.Set "path" $gallery_path }}
+{{ end }}
+{{ $static_path := .Scratch.Get "static_path"}}
+{{ $path := .Scratch.Get "path"}}
+
+{{ if fileExists $static_path }}
+  <div class="image-gallery {{ $class }}" data-thumbnail-dimensions="4:3">
+    {{ $files := readDir $static_path }}
+    <ul class="gallery-files" data-gallery-path="{{ $path }}" style="display: none">
+      {{ range $files}}
+        <li>{{ .Name }}</li>
+      {{ end }}
+    </ul>
+  </div>
+{{ end }}

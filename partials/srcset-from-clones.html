@@ -1,0 +1,25 @@
+{{- $image_path := .image_path -}}
+{{- $image_extenstion := path.Ext .image_path -}}
+{{- $image_path_no_ext := strings.TrimSuffix $image_extenstion $image_path -}} 
+{{- $image_dir := path.Dir .image_path -}}
+{{- $cloned_image_dir := replace $image_dir "images" "_image-clones" -}}
+{{- if fileExists (print "static/" $cloned_image_dir) -}}
+  {{- $files := (readDir (print "static/" $cloned_image_dir) ) -}}
+  {{- $size_versions := slice -}}
+  {{- range $files -}}
+    {{- if in .Name ( path.Base $image_path_no_ext) -}}
+      {{- $size_versions = $size_versions | append (print $cloned_image_dir "/" .Name) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $items := slice -}}
+  {{- range $size_versions -}}
+    {{- $this_image_extenstion := path.Ext . -}}
+    {{- $this_image_path_no_ext := strings.TrimSuffix $this_image_extenstion . -}} 
+    {{- $size := (index  (last 1 (split $this_image_path_no_ext "-")) 0) -}}
+    {{- $items = $items | append (print . " " $size) -}}
+  {{- end -}}
+  {{- delimit $items ", " -}}
+{{- end -}}
+
+
+

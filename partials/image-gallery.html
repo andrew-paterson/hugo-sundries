@@ -1,0 +1,26 @@
+{{- $gallery_path_static := printf "%s%s" "static" .gallery_path -}}
+{{- $static_path :=  $gallery_path_static -}}
+{{- $path := .gallery_path -}}
+{{- if fileExists $static_path -}}
+  <div class="image-gallery" data-thumbnail-dimensions="4:3" >
+    {{- $files := readDir $static_path -}}
+      {{- range $files -}}
+        {{- $file := . -}}
+        {{- $src := (print  $path "/" $file.Name) -}}
+        {{- $srcset := ( partial "hugo-sundries/srcset-from-clones.html" (dict "context" . "image_path" (print  $path "/" $file.Name))) -}}
+        <a class="gallery-thumbnail" data-fancybox="gallery" href="{{ $src }}" data-srcset="{{ $srcset }}" data-lazy-image-src="{{ $src }}" data-lazy-image-set="{{ $srcset }}" data-lazy-image-srcset-sizes="(max-width: 400px) 130px, 300px">
+        </a>
+      {{- end -}}
+  </div>
+{{- end -}}
+
+ 
+
+
+
+
+
+
+
+     
+        
