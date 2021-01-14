@@ -46,9 +46,18 @@ Each element with an infinite loading image may optionally have:
 * A `data-lazy-image-srcset-sizes` attribute for responsive images. Will be added to the loaded image as the `sizes` attribute.
 * An inline style attribute of `display:none`. This is removed when the lazy loaded image is inserted into the DOM. Note that this happens before the image has finished loading. 
 
-## Examples
+### JS defaults
 
-### A very simple example
+    <script>
+      var infinityImageLoaderDefaults = {
+        scrollElementSelector: '#wrapper',
+        loadingElement: `<div class="test" data-infinity-image-loader-load-more>Test</div>`,
+        batchSize: 3
+      }
+    </script>
+### Examples
+
+#### A very simple example
 
     <div data-infinity-image-loader>
       <div data-lazy-image-src="/images/image-01.jpg">
@@ -62,7 +71,7 @@ Each element with an infinite loading image may optionally have:
       </div>
     </div>
 
-### Responsive images, constrained image aspect ratio, and initially hidden elements.
+#### Responsive images, constrained image aspect ratio, and initially hidden elements.
 
     <div data-infinity-image-loader>
       <div data-lazy-image-src="/images/image-01.jpg"
@@ -82,7 +91,7 @@ Each element with an infinite loading image may optionally have:
       </div>
     </div>
 
-### With other markup
+#### With other markup
 
 Each post is hidden until its image is added to the DOM and begins loading.
 

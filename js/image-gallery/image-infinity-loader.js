@@ -7,7 +7,7 @@ var infinityLoaderElements = document.querySelectorAll('[data-infinity-image-loa
 if (!infinityImageLoaderDefaults) {
   var infinityImageLoaderDefaults = {};
 }
-var loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" "data-infinity-image-loader-load-more">Loading more Images</div>';
+var loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more>Loading more Images</div>';
 
 infinityLoaderElements.forEach(infinityLoaderElement => {
   doLazyLoad(infinityLoaderElement);
@@ -81,7 +81,7 @@ function loadImageBatch(infinityLoaderElement) {
   } else if (infinityImageLoaderDefaults.batchSize) {
     batchSize = infinityImageLoaderDefaults.batchSize;
   } else {
-    batchSize = 24;
+    batchSize = 12;
   }
   var currentBatch = Array.from(infinityLoaderElement.querySelectorAll('[data-lazy-image-src]:not(.loading):not(.complete)')).slice(0, batchSize); 
   currentBatch.forEach((infinityLoaderItem) => {
@@ -113,10 +113,7 @@ function checkLoad(infinityLoaderElement) {
     }
     return;
   }
-  var trigger = $("[data-infinity-image-loader-load-more]");
-  if (!trigger.offset()) {
-    return;
-  }
+
   if (!visibleY(loadMoreEl) || currentlyLoadingImages) {
     return;
   }

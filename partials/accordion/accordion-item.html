@@ -1,0 +1,11 @@
+{{- $header_element := .header_element -}}
+{{- with .page_context.Site.GetPage (print .page) -}}
+<div class="ac">
+  <div class="ac-header">
+    <h2><div class="ac-trigger" role="button">{{ .Title }}</div></h2>
+  </div>
+  <div class="ac-panel">
+    <div class="ac-panel-inner">{{ .Content }}</div>
+  </div>
+</div>
+{{- end -}}

@@ -1,0 +1,6 @@
+{{ $page_context := .page_context }}
+<div class="accordion-container">
+  {{ range .pages }}
+    {{ partial "hugo-sundries/accordion/accordion-item.html" (dict "page_context" $page_context "page" . )}}
+  {{ end }}
+</div>

@@ -1,0 +1,97 @@
+/*!
+ * Accordion v3.1.1
+ * Simple accordion created in pure Javascript.
+ * https://github.com/michu2k/Accordion
+ *
+ * Copyright (c) Michał Strumpf
+ * Published under MIT License
+ */
+
+$ac-trigger-padding-x: 10px !default;
+$ac-trigger-padding-y: 10px !default;
+$ac-trigger-icon-width: 20px !default;
+$ac-item-box-shadow: none !default;
+$ac-panel-padding: 15px 30px !default;
+$ac-border-color: #ccc !default;
+$ac-panel-background-color: #fff !default;
+$ac-trigger-background-color: #eee !default;
+$ac-item-border-radius: 3px;
+
+.ac {
+  margin-top: 10px;
+  border: 1px solid $ac-border-color;
+  background-color: $ac-panel-background-color;
+  box-sizing: border-box;
+  box-shadow: $ac-item-box-shadow;
+  border-radius: $ac-item-border-radius;
+}
+
+.ac .ac-header {
+  margin: 0;
+  padding: 0;
+  & > * {
+    margin: 0;
+  }
+}
+
+.ac .ac-trigger {
+  text-align: left;
+  width: 100%;
+  padding: $ac-trigger-padding-y #{$ac-trigger-padding-x + $ac-trigger-icon-width} $ac-trigger-padding-y $ac-trigger-padding-x;
+  background-color: $ac-trigger-background-color;
+  display: block;
+  cursor: pointer;
+  -webkit-transition: color .25s ease;
+  transition: color .25s ease;
+  position: relative;
+  text-decoration: none;
+  margin: 0;
+  border: 0
+}
+
+.ac .ac-trigger::after {
+  content: '+';
+  text-align: center;
+  width: 15px;
+  -webkit-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  position: absolute;
+  right: 10px;
+  top: 50%
+}
+
+.ac .ac-trigger:focus {
+  color: #8a8a8a
+}
+
+.ac .ac-panel {
+  overflow: hidden;
+  -webkit-transition-property: height, visibility;
+  transition-property: height, visibility;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease
+}
+
+.ac .ac-panel-inner {
+  padding: $ac-panel-padding;
+  border-top: 1px solid $ac-border-color;
+}
+
+.ac .ac-panel .ac-text {
+  font: 15px/24px Arial, sans-serif;
+  color: #111;
+  padding: 10px;
+  margin: 0
+}
+
+.ac.js-enabled .ac-panel {
+  visibility: hidden
+}
+
+.ac.is-active .ac-panel {
+  visibility: visible
+}
+
+.ac.is-active>.ac-header .ac-trigger::after {
+  content: '\2013'
+}
