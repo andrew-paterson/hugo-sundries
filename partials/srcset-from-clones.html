@@ -19,7 +19,10 @@
     {{- $items = $items | append (print . " " $size) -}}
   {{- end -}}
   {{- delimit $items ", " -}}
+{{ else }}
+  {{ $image_path}}
 {{- end -}}
+
 
 
 
