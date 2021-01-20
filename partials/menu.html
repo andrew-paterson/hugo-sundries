@@ -2,7 +2,7 @@
     {{ $currentPage := . }}
     {{ range .menu }}
       {{ if .HasChildren }}
-        <li class="parent {{ .Identifier }}">
+        <li class="parent {{ .Params.class }}">
           {{ if .URL }}
             <a href="{{ .URL }}">
               {{ .Pre }}
@@ -14,7 +14,7 @@
           {{ end }}
           <ul class="menu level-2">
             {{ range .Children }}
-            <li class=" {{ .Identifier }}">
+            <li class=" {{ .Params.class }}">
               {{ if .URL }}
                 <a href="{{ .URL }}">
                   {{ .Pre }}
@@ -28,7 +28,7 @@
               <div class="divider"></div>
               <ul class="menu level-3">
                 {{ range .Children }}
-                  <li class=" {{ .Identifier }}">
+                  <li class=" {{ .Params.class }}">
                     {{ if .URL }}
                       <a href="{{ .URL }}">
                         {{ .Pre }}
@@ -47,7 +47,7 @@
           </ul>
         </li>
       {{ else }}
-        <li class="{{ .Identifier }}">
+        <li class="{{ .Params.class }}">
           {{ if .URL }}
             <a href="{{ .URL }}">
               {{ .Pre }}

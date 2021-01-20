@@ -1,0 +1,13 @@
+{{ $image_path := (.Get "image_path") }}
+{{ $alt := (.Get "alt") }}
+{{ $title := (.Get "title") }}
+{{ $caption := (.Get "caption") }}
+{{ $class := .Get "class" }}
+{{ if $caption}}
+<figure class="{{ $class }}">
+  <img src="{{ $image_path }}" alt="{{ $alt }}" title="{{ $title }}">
+  <figcaption>{{ $caption }}</figcaption>
+</figure> 
+{{ else }}
+  <img src="{{ $image_path }}" alt="{{ $alt }}" title="{{ $title }}" class="{{ $class }}">
+{{ end }}
