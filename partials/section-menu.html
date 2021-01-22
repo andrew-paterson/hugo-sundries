@@ -1,9 +1,9 @@
 {{ if .max }}
-  {{ range first .max (where .context.Site.RegularPages.ByTitle "Section" .section_name ) }}
+  {{ range first .max (where .context.Site.RegularPages.ByTitle "Section" .section_name ).ByPublishDate.Reverse  }}
     <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
   {{ end }}
 {{ else }}
-  {{ range (where .context.Site.RegularPages.ByTitle "Section" .section_name ) }}
+  {{ range (where .context.Site.RegularPages.ByTitle "Section" .section_name ).ByPublishDate.Reverse  }}
     <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
   {{ end }}
 {{ end }}
