@@ -1,5 +1,6 @@
 {{- $gallery_path_static := printf "%s%s" "static" .gallery_path -}}
 {{- $static_path :=  $gallery_path_static -}}
+{{- $page_context := .context -}}
 {{- $path := .gallery_path -}}
 {{- if fileExists $static_path -}}
   <div class="image-gallery" data-thumbnail-dimensions="4:3" data-infinity-image-loader>
@@ -7,7 +8,7 @@
       {{- range $files -}}
         {{- $file := . -}}
         {{- $src := (print  $path "/" $file.Name) -}}
-        {{- $srcset := ( partial "hugo-sundries/srcset-from-clones.html" (dict "context" . "image_path" (print  $path "/" $file.Name))) -}}
+        {{- $srcset := ( partial "hugo-sundries/srcset-from-clones.html" (dict "context" $page_context "image_path" (print  $path "/" $file.Name))) -}}
         <a class="gallery-thumbnail" data-fancybox="gallery" href="{{ $src }}" data-srcset="{{ $srcset }}" data-lazy-image-src="{{ $src }}" {{ printf "data-lazy-image-srcset=%q" $srcset | safeHTMLAttr }} data-lazy-image-srcset-sizes="(max-width: 400px) 130px, 300px" style="display: none">
           <div data-lazy-image-parent data-width-height-ratio="4:3"></div>
         </a>
