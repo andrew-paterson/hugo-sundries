@@ -80,9 +80,42 @@ With the images listed above, the following partial will create the HTML below.
       </a>
       <figcaption>This is the image caption</figcaption>
     </figure>
-# JavaSript components
 
-## Infinity lmage loader
+## Youtube embed
+
+Embeds a YouTube video. Simply pass the YouTube url as shown below.
+
+    {{ partial "hugo-sundries/youtube.html" (dict "youtube_url" "https://www.youtube.com/watch?v=X21mJh6j9i4") }}
+## Google map
+
+    {{ partial "hugo-sundries/google-map.html" **Maps URL** }}
+## Image gallery
+
+Creates an grid layout of thumbnails from the images in a folder, and lazy loads them using the [below](#infinity-image-loader). Designed for se in conjunction with Fancybox 3. The thumbnails are generated using the [responsive image partial](#responsive-image).
+
+### Requirements
+
+The following scripts must be loaded on the page
+
+* Jquery 3 or higher. This module has it at `hugo-sundries/js/jquery-3.2.1.min.js`.
+* Fancybox 3. This module has it at `hugo-sundries/js/jquery.fancybox.min.js`.
+* Image infinity loader. This module has it at `hugo-sundries/js/image-infinity-loader.js`
+
+Import the styles in `hugo-sundries/scss/_image-gallery.scss`.
+### Basic Usage
+
+    {{ partial "hugo-sundries/image-gallery" (dict "context" . "gallery_path" **PATH_TO_DIRECTORY_OF_IMAGES**) }}
+### Additional params
+
+* `thumbnail_sizes_attr` - sizes attribute for the thumbnails where `srcset` is used.
+* `thumbnail_aspect_ratio` - the aspect ratio for the thumbnails.
+```
+{{ partial "hugo-sundries/image-gallery" (dict "context" . "gallery_path" .Params.gallery_path "thumbnail_sizes_attr" "(max-width: 400px) 130px, 300px")}}
+```
+
+# JavaScript components
+
+## Infinity image loader
 
 Loads images in batches as the user scrolls. Note that the images can be wrapped inside any HTML markup. As long as the required data attributes are present where they need to be, the loading will work.
 
@@ -100,7 +133,7 @@ Each element with an infinite loading image must have:
 * A `data-lazy-image-src` attribute with the src of the element.
 * It must contain an element with the data attribute `data-lazy-image-parent`. When the image is lazy loaded, it will be placed inside this element. This element should be empty.
   - The `data-lazy-image-parent` element may optionally have a `data-width-height-ratio`, set to a width/height ratio, expressed as "w:h". When present, the height of the `data-lazy-image-parent` element will be set based on the display width of the element and the ratio provided.
-    - Note that for this to be effective, the loaded image should have the follwing styles:
+    - Note that for this to be effective, the loaded image should have the following styles:
 
           [data-lazy-image-parent] > img {
             width: 100%;
