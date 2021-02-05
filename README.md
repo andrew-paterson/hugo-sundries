@@ -100,6 +100,7 @@ The following scripts must be loaded on the page
 * Jquery 3 or higher. This module has it at `hugo-sundries/js/jquery-3.2.1.min.js`.
 * Fancybox 3. This module has it at `hugo-sundries/js/jquery.fancybox.min.js`.
 * Image infinity loader. This module has it at `hugo-sundries/js/image-infinity-loader.js`
+* The Javascript code that sets image dimensions based on aspect ratio. This module has it at `hugo-sundries/js/image-dimensions.js`.
 
 Import the styles in `hugo-sundries/scss/_image-gallery.scss`.
 ### Basic Usage
@@ -108,9 +109,9 @@ Import the styles in `hugo-sundries/scss/_image-gallery.scss`.
 ### Additional params
 
 * `thumbnail_sizes_attr` - sizes attribute for the thumbnails where `srcset` is used.
-* `thumbnail_aspect_ratio` - the aspect ratio for the thumbnails.
+* `thumbnail_aspect_ratio` - the aspect ratio for the thumbnails, expressed as width:height.
 ```
-{{ partial "hugo-sundries/image-gallery" (dict "context" . "gallery_path" .Params.gallery_path "thumbnail_sizes_attr" "(max-width: 400px) 130px, 300px")}}
+{{ partial "hugo-sundries/image-gallery" (dict "context" . "gallery_path" .Params.gallery_path "thumbnail_sizes_attr" "(max-width: 400px) 130px, 300px" "data_thumbnail_dimensions" "4:3")}}
 ```
 
 # JavaScript components
