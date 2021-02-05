@@ -1,7 +1,6 @@
 {{ $image_path := .image_path }}
 <source media="{{ .media }}" 
   srcset="{{ partial "hugo-sundries/srcset-from-clones.html" (dict "context" .context "image_path" $image_path)}}"
-  src="{{ $image_path }}"
   {{ if .sizes }}
     sizes="{{ .sizes }}"
   {{ end }}>

@@ -1,4 +1,9 @@
 {{- $image_path := .image_path -}}
+{{- $caption := .caption -}}
+{{- $image_link := .image_link -}}
+{{- $image_link_class := .image_link_class -}}
+{{- if $caption -}}<figure class="{{ .class }}">{{- end -}}
+{{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
 <img srcset="{{ partial "hugo-sundries/srcset-from-clones.html" (dict "context" .context "image_path" $image_path)}}"
   src="{{ $image_path }}"
   {{ if .sizes }}
@@ -19,7 +24,12 @@
   {{ if .data_object_fit }}
     data-object-fit="{{ .data_object_fit }}"
   {{ end }}
-  {{ if .class }}
+  {{ if (and .class (not .caption) )}}
     class="{{ .class }}"
   {{ end }}
 />
+{{- if $image_link -}}</a>{{- end -}}
+{{- if $caption -}}
+<figcaption>{{ $caption }}</figcaption>
+</figure>
+{{- end -}}
