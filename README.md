@@ -12,13 +12,84 @@ The `max` param is optional- limits the number of items to show.
     
     {{ partial "hugo-sundries/section-menu.html" (dict "context" . "section_name" "blog" "max" "5")}} }}
 
+## Responsive image
 
-# JS
+### Requirememnts
+
+There must be a directory in `/static`specifically for responsive versions of all site images.  This directory should mirror the directory structure of the main site images folder, but contain several sizes of each images, with the width appended.
+
+**Main image folder**
+
+    /images/image-01.jpg
+    /images/image-02.jpg
+
+**Responsive image folder**
+
+    /responive-images/image-01-400w.jpg
+    /responive-images/image-01-1269w.jpg
+    /responive-images/image-01-1350w.jpg
+    /responive-images/image-01-1600w.jpg
+    /responive-images/image-02-200w.jpg
+    /responive-images/image-02-600w.jpg
+    /responive-images/image-03-400w.jpg
+
+See [https://github.com/andrew-paterson/responsive-images](https://github.com/andrew-paterson/responsive-images) for an NPM module with generates the responsive versions of images based on settings provided.
+
+Note that ou should never directly refer to the reponsive images in your Hugo templates or content files. Treat the main image folde as the dingle source of truth for images, and the reponsive image partial will find the corresponding responsive image sizes for you.
+### Config
+
+The partial needs to know the base directoiry of your main images folder, as well as the base direcoty that eill contain your responsibve images. See the example config below wit the defaults.
+
+`config.yml`
+
+    params: 
+      image_dir: #default = /images
+      responsive_image_dir: #default = /responsive-images
+
+## Basic Use
+
+    {{ partial "hugo-sundries/responsive-image.html" (dict "context" .context "image_path" **PATH TO IMGE IN THE MAIN IMAGE DIRECTORY**) }}
+### Example
+
+With the images listed above, the following partial will create the HTML below.
+
+    {{ partial "hugo-sundries/responsive-image.html" (dict "context" . "image_path" "/images/image-01.jpg") }}
+
+    <img srcset="/responsive-images/image-01-400w.jpg 400w, /responsive-images/image-01-1269w.jpg 1269w, /responsive-images/image-01-1350w.jpg 1350w, /responsive-images/image-01-1600w.jpg 1600w" src="/images/image-01.jpg" >
+
+### Additional params
+
+`caption` - displays in a `figcaption` element underneath the image, and wraps in in a `figure` element.
+`image_link` - wraps the images in a link with the `href` set to the value of `image_link`.
+`image_link_class` - class of the link that wraps the image.
+`class` - class of the `img`, or the `figure` element is there is a caption.
+`sizes` - the sizes attribute of the `img`.
+`alt`- the alt attribute of the `img`.
+`title`- the tile attribute of the `img`.
+`data_dimensions` - set to enforce a height to width ration on the image.
+`data_object_fit` - set to `cover` to invoke the IE object fit pollyfill.
+
+**Example declaration**
+
+    {{ partial "hugo-sundries/responsive-image.html" (dict "context" . "image_path" "/images/image-01.jpg" "sizes" "900px" "image_link" "https://example.com" "image_link_class" "external-link") }}
+
+**Example output**
+
+    <figure class="cover-image">
+      <a href="https://example.com" class="external-link">
+        <img srcset="/images/image-01.jpg" src="/images/image-01.jpg" sizes="900px">
+      </a>
+      <figcaption>This is the image caption</figcaption>
+    </figure>
+# JavaSript components
 
 ## Infinity lmage loader
 
 Loads images in batches as the user scrolls. Note that the images can be wrapped inside any HTML markup. As long as the required data attributes are present where they need to be, the loading will work.
 
+### Adding it
+
+Simply ensure that the script in `hugo-sundries/js/image-infinity-loader.js` is loaded on the page.
 ### The container
 
 The set of elements with images to infinitely load must be contained in an element with the data attribute `data-infinity-image-loader`.
