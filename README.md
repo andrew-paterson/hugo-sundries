@@ -14,7 +14,7 @@ The `max` param is optional- limits the number of items to show.
 
 ## Responsive image
 
-### Requirememnts
+### Requirements
 
 There must be a directory in `/static`specifically for responsive versions of all site images.  This directory should mirror the directory structure of the main site images folder, but contain several sizes of each images, with the width appended.
 
@@ -25,20 +25,20 @@ There must be a directory in `/static`specifically for responsive versions of al
 
 **Responsive image folder**
 
-    /responive-images/image-01-400w.jpg
-    /responive-images/image-01-1269w.jpg
-    /responive-images/image-01-1350w.jpg
-    /responive-images/image-01-1600w.jpg
-    /responive-images/image-02-200w.jpg
-    /responive-images/image-02-600w.jpg
-    /responive-images/image-03-400w.jpg
+    /responsive-images/image-01-400w.jpg
+    /responsive-images/image-01-1269w.jpg
+    /responsive-images/image-01-1350w.jpg
+    /responsive-images/image-01-1600w.jpg
+    /responsive-images/image-02-200w.jpg
+    /responsive-images/image-02-600w.jpg
+    /responsive-images/image-03-400w.jpg
 
 See [https://github.com/andrew-paterson/responsive-images](https://github.com/andrew-paterson/responsive-images) for an NPM module with generates the responsive versions of images based on settings provided.
 
-Note that ou should never directly refer to the reponsive images in your Hugo templates or content files. Treat the main image folde as the dingle source of truth for images, and the reponsive image partial will find the corresponding responsive image sizes for you.
+Note that you should never directly refer to the responsive images in your Hugo templates or content files. Treat the main image folder as the dingle source of truth for images, and the responsive image partial will find the corresponding responsive image sizes for you.
 ### Config
 
-The partial needs to know the base directoiry of your main images folder, as well as the base direcoty that eill contain your responsibve images. See the example config below wit the defaults.
+The partial needs to know the base directory of your main images folder, as well as the base directory that will contain your responsive images. See the example config below wit the defaults.
 
 `config.yml`
 
@@ -48,7 +48,7 @@ The partial needs to know the base directoiry of your main images folder, as wel
 
 ## Basic Use
 
-    {{ partial "hugo-sundries/responsive-image.html" (dict "context" .context "image_path" **PATH TO IMGE IN THE MAIN IMAGE DIRECTORY**) }}
+    {{ partial "hugo-sundries/responsive-image.html" (dict "context" .context "image_path" **PATH TO IMAGE IN THE MAIN IMAGE DIRECTORY**) }}
 ### Example
 
 With the images listed above, the following partial will create the HTML below.
@@ -67,7 +67,7 @@ With the images listed above, the following partial will create the HTML below.
 `alt`- the alt attribute of the `img`.
 `title`- the tile attribute of the `img`.
 `data_dimensions` - set to enforce a height to width ration on the image.
-`data_object_fit` - set to `cover` to invoke the IE object fit pollyfill.
+`data_object_fit` - set to `cover` to invoke the IE object fit polyfill.
 
 **Example declaration**
 
