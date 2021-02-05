@@ -15,9 +15,6 @@
   {{ if .title }}
     title="{{ .title }}"
   {{ end }}
-  {{ if .title }}
-    title="{{ .title }}"
-  {{ end }}
   {{ if .data_dimensions }}
     data-dimensions="{{ .data_dimensions }}"
   {{ end }}
@@ -27,6 +24,7 @@
   {{ if (and .class (not .caption) )}}
     class="{{ .class }}"
   {{ end }}
+  {{ .img_attrs | safeHTMLAttr }}
 />
 {{- if $image_link -}}</a>{{- end -}}
 {{- if $caption -}}

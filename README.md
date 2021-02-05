@@ -66,12 +66,11 @@ With the images listed above, the following partial will create the HTML below.
 `sizes` - the sizes attribute of the `img`.
 `alt`- the alt attribute of the `img`.
 `title`- the tile attribute of the `img`.
-`data_dimensions` - set to enforce a height to width ration on the image.
-`data_object_fit` - set to `cover` to invoke the IE object fit polyfill.
+`img_attrs` - additional attributes for the image element.
 
 **Example declaration**
 
-    {{ partial "hugo-sundries/responsive-image.html" (dict "context" . "image_path" "/images/image-01.jpg" "sizes" "900px" "image_link" "https://example.com" "image_link_class" "external-link") }}
+    {{ partial "hugo-sundries/responsive-image.html" (dict "context" . "image_path" "/images/image-01.jpg" "sizes" "900px" "image_link" "https://example.com" "image_link_class" "external-link" "img_attrs" "data-dimensions=4:1 data-object-fit=cover) }}
 
 **Example output**
 
