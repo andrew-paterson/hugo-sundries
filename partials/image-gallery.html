@@ -5,7 +5,7 @@
 {{- $thumbnail_sizes_attr := .thumbnail_sizes_attr -}}
 {{- $thumbnail_aspect_ratio := .thumbnail_aspect_ratio -}}
 {{- if fileExists $static_path -}}
-  <div class="image-gallery" data-thumbnail-dimensions="{{ thumbnail_aspect_ratio }}" data-infinity-image-loader>
+  <div class="image-gallery" data-thumbnail-dimensions="{{ $thumbnail_aspect_ratio }}" data-infinity-image-loader>
     {{- $files := readDir $static_path -}}
       {{- range $files -}}
         {{- $file := . -}}
