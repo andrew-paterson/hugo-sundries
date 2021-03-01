@@ -102,7 +102,7 @@ The following scripts must be loaded on the page
 * Image infinity loader. This module has it at `hugo-sundries/js/image-infinity-loader.js`
 * The Javascript code that sets image dimensions based on aspect ratio. This module has it at `hugo-sundries/js/image-dimensions.js`.
 
-Import the styles in `hugo-sundries/scss/_image-gallery.scss`.
+Import the styles in `hugo-sundries/scss/_image-gallery.scss` and `hugo-sundries/scss/addons/fancybox.scss`
 ### Basic Usage
 
     {{ partial "hugo-sundries/image-gallery" (dict "context" . "gallery_path" **PATH_TO_DIRECTORY_OF_IMAGES**) }}
