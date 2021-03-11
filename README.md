@@ -216,3 +216,9 @@ Each post is hidden until its image is added to the DOM and begins loading.
         <div class="summary">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</div>
       </div>
     </div>
+
+## Shortcodes
+
+### Responsive image
+
+    {{< shortcodes/responsive-image image_path="/media/images/posts/observatory.jpg" >}}

@@ -1,0 +1,33 @@
+{{- $image_path := (.Get "image_path") -}}
+{{- $caption := (.Get "caption") -}}
+{{- $image_link := (.Get "image_link") -}}
+{{- $image_link_class := (.Get "image_link_class") -}}
+{{- if $caption -}}<figure class="{{ (.Get "class") }}">{{- end -}}
+{{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
+<img srcset="{{< shortcodes/srcset-from-clones.html" image_path=$image_path >}}"
+  src="{{ $image_path }}"
+  {{ if (.Get "sizes") }}
+    sizes="{{ (.Get "sizes") }}"
+  {{ end }}
+  {{ if (.Get "alt") }}
+    alt="{{ (.Get "alt") }}"
+  {{ end }}
+  {{ if (.Get "title") }}
+    title="{{ (.Get "title") }}"
+  {{ end }}
+  {{ if (.Get "data_dimensions") }}
+    data-dimensions="{{ (.Get "data_dimensions") }}"
+  {{ end }}
+  {{ if (.Get "data_object_fit") }}
+    data-object-fit="{{ (.Get "data_object_fit") }}"
+  {{ end }}
+  {{ if (and (.Get "class") (not (.Get "caption")) )}}
+    class="{{ (.Get "class") }}"
+  {{ end }}
+  {{ (.Get "img_attrs") | safeHTMLAttr }}
+/>
+{{- if $image_link -}}</a>{{- end -}}
+{{- if $caption -}}
+<figcaption>{{ $caption }}</figcaption>
+</figure>
+{{- end -}}
