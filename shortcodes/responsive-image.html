@@ -4,7 +4,7 @@
 {{- $image_link_class := (.Get "image_link_class") -}}
 {{- if $caption -}}<figure class="{{ (.Get "class") }}">{{- end -}}
 {{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
-<img srcset="{{< shortcodes/srcset-from-clones.html" image_path=$image_path >}}"
+<img srcset="{{ partial "hugo-sundries/srcset-from-clones.html" (dict "context" . "image_path" $image_path)}}"
   src="{{ $image_path }}"
   {{ if (.Get "sizes") }}
     sizes="{{ (.Get "sizes") }}"
