@@ -1,7 +1,8 @@
-{{- $image_path := (.Get "image_path") -}}
+{{- $image_path := ( or (.Get "image_path") "") -}}
 {{- $caption := (.Get "caption") -}}
 {{- $image_link := (.Get "image_link") -}}
 {{- $image_link_class := (.Get "image_link_class") -}}
+{{ if gt (len $image_path) 0 }}
 {{- if $caption -}}<figure class="{{ (.Get "class") }}">{{- end -}}
 {{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
 <img srcset="{{ partial "hugo-sundries/srcset-from-clones.html" (dict "context" . "image_path" $image_path)}}"
@@ -31,3 +32,4 @@
 <figcaption>{{ $caption }}</figcaption>
 </figure>
 {{- end -}}
+{{ end }}
