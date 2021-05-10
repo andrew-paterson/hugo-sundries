@@ -1,0 +1,9 @@
+{{ $final := "true" }}
+{{ if (not . ) }}
+  {{ $final = "false" }}
+{{ else if lt (len .) 1}}
+  {{ $final = "false" }}
+{{else}}
+  {{ $final = "true" }}
+{{ end }}
+{{ return $final }}

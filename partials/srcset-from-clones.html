@@ -1,3 +1,4 @@
+{{ $final := ""}}
 {{- $image_path := .image_path -}}
 {{- $site_image_dir  := (or .context.Site.Params.image_dir "/images") -}}
 {{- $site_responsive_image_dir := (or .context.Site.Params.responsive_image_dir "/responsive-images") -}}
@@ -27,7 +28,8 @@
     {{- $size := (index  (last 1 (split $this_image_path_no_ext "-")) 0) -}}
     {{- $items = $items | append (print . " " $size) -}}
   {{- end -}}
-  {{- delimit $items ", " -}}
+  {{- $final = (delimit $items ", ") -}}
+  {{ return $final }}
 {{ else }}
   {{ $image_path}}
 {{- end -}}
