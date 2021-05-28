@@ -2,8 +2,19 @@
 {{- $caption := (.Get "caption") -}}
 {{- $image_link := (.Get "image_link") -}}
 {{- $image_link_class := (.Get "image_link_class") -}}
+{{- $class := (.Get "class") }}
+{{- if (.Get "max_width") -}}
+  {{ $max_width_num := strings.TrimSuffix "%" (.Get "max_width") }}
+  {{- $class = (print $class " max-width-" $max_width_num) }}
+{{- end -}}
+{{- if (.Get "align") -}}
+  {{- $class = (print $class " align-" (.Get "align")) }}
+{{- end -}}
+{{- if (.Get "wrap_text") -}}
+  {{- $class = (print $class " wrap-text") }}
+{{- end -}}
 {{ if gt (len $image_path) 0 }}
-{{- if $caption -}}<figure class="{{ (.Get "class") }}">{{- end -}}
+{{- if $caption -}}<figure class="{{ $class }}">{{- end -}}
 {{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
 <img srcset="{{ partial "hugo-sundries/srcset-from-clones.html" (dict "context" . "image_path" $image_path)}}"
   src="{{ $image_path }}"

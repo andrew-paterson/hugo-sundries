@@ -1,0 +1,43 @@
+$sizes: (25, 33, 50);
+
+@each $size in $sizes {
+  .max-width-#{$size} {
+    max-width: #{$size}#{"%"};
+  }
+}
+
+.align-center {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.align-right {
+  margin-left: auto;
+  // margin-right: auto;
+  display: block;
+}
+
+.wrap-text {
+  margin-bottom: $spacer-lg;
+  @each $size in $sizes {
+    &.max-width-#{$size} {
+      $size: #{$size}#{"%"};
+      max-width: calc(#{$size} - #{$spacer-md})
+    }
+  }
+  &.align-left {
+    float: left;
+    margin-right: $spacer-md;
+  }
+  &.align-right {
+    float: right;
+    margin-left: $spacer-md;
+  }
+}
+
+
+
+.embedded-video {
+  clear: both;
+}
