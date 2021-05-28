@@ -1,8 +1,16 @@
 {{ $url := urls.Parse (.Get "youtube_url") }}
 {{ $query_params := $url.Query }}
 {{ $id := index (index $query_params "v") 0 }}
+{{ $caption := (.Get "caption")}}
 {{ if $id }}
+{{- if $caption -}}<figure class="embedded-video-container">{{- end -}}
+
 <div class="embedded-video">
   <iframe src="https://www.youtube.com/embed/{{ $id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+
 </div>
+  {{- if $caption -}}
+    <figcaption>{{ $caption }}</figcaption>
+    </figure>
+  {{- end -}}
 {{ end }}
