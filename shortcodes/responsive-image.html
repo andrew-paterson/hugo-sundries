@@ -1,4 +1,9 @@
 {{- $image_path := ( or (.Get "image_path") "") -}}
+{{ $section_post_max_width := "" }}
+{{ if $.Page.Parent }}
+  {{ $section_post_max_width = $.Page.Parent.Params.post_max_width }}
+{{ end }}
+{{- $sizes := ( or (.Get "sizes") .Page.Params.post_max_width $section_post_max_width .Site.Params.post_max_width) -}}
 {{- $caption := (.Get "caption") -}}
 {{- $image_link := (.Get "image_link") -}}
 {{- $image_link_class := (.Get "image_link_class") -}}
@@ -8,18 +13,18 @@
   {{- $class = (print $class " max-width-" $max_width_num) }}
 {{- end -}}
 {{- if (.Get "align") -}}
-  {{- $class = (print $class " align-" (.Get "align")) }}
+  {{- $class = (print $class " responsive-image-align-" (.Get "align")) }}
 {{- end -}}
 {{- if (.Get "wrap_text") -}}
-  {{- $class = (print $class " wrap-text") }}
+  {{- $class = (print $class " responsive-image-wrap-text") }}
 {{- end -}}
 {{ if gt (len $image_path) 0 }}
 {{- if $caption -}}<figure class="{{ $class }}">{{- end -}}
 {{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
 <img srcset="{{ partial "hugo-sundries/srcset-from-clones.html" (dict "context" . "image_path" $image_path)}}"
   src="{{ $image_path }}"
-  {{ if (.Get "sizes") }}
-    sizes="{{ (.Get "sizes") }}"
+  {{ if $sizes }}
+    sizes="{{ $sizes }}"
   {{ end }}
   {{ if (.Get "alt") }}
     alt="{{ (.Get "alt") }}"

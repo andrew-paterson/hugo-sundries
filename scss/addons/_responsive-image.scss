@@ -6,19 +6,18 @@ $sizes: (25, 33, 50, 66, 100);
   }
 }
 
-.align-center {
+.responsive-image-align-center {
   margin-left: auto;
   margin-right: auto;
   display: block;
 }
 
-.align-right {
+.responsive-image-align-right {
   margin-left: auto;
-  // margin-right: auto;
   display: block;
 }
 
-.wrap-text {
+.responsive-image-wrap-text {
   margin-bottom: $spacer-lg;
   @each $size in $sizes {
     &.max-width-#{$size} {
@@ -26,11 +25,11 @@ $sizes: (25, 33, 50, 66, 100);
       max-width: calc(#{$size} - #{$spacer-md})
     }
   }
-  &.align-left {
+  &.responsive-image-align-left {
     float: left;
     margin-right: $spacer-md;
   }
-  &.align-right {
+  &.responsive-image-align-right {
     float: right;
     margin-left: $spacer-md;
   }
