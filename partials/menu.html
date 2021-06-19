@@ -25,7 +25,6 @@
                 <span>{{ .Name }}</span>
               {{ end }}
               {{ if .HasChildren }}
-              <div class="divider"></div>
               <ul class="menu level-3">
                 {{ range .Children }}
                   <li class=" {{ .Params.class }}">
