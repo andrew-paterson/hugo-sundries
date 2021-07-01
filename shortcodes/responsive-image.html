@@ -1,9 +1,5 @@
 {{- $image_path := ( or (.Get "image_path") "") -}}
-{{ $section_post_max_width := "" }}
-{{ if $.Page.Parent }}
-  {{ $section_post_max_width = $.Page.Parent.Params.post_max_width }}
-{{ end }}
-{{- $sizes := ( or (.Get "sizes") .Page.Params.post_max_width $section_post_max_width .Site.Params.post_max_width) -}}
+{{ $sizes := (or (.Get "sizes") (partial "hugo-sundries/fallback-srcset-sizes.html" (dict "context" . "type" "post" )))}}
 {{- $caption := (.Get "caption") -}}
 {{- $image_link := (.Get "image_link") -}}
 {{- $image_link_class := (.Get "image_link_class") -}}
