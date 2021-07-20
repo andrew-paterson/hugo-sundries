@@ -44,6 +44,9 @@ function doLazyLoad(infinityLoaderElement) {
 }
 
 function generateImageMarkup(infinityLoaderItem) {
+  if (infinityImageLoaderDefaults.customImageMarkup) {
+    return infinityImageLoaderDefaults.customImageMarkup(infinityLoaderItem);
+  }
   var src = infinityLoaderItem.getAttribute('data-lazy-image-src');
   var dataSrcset = infinityLoaderItem.getAttribute('data-lazy-image-srcset');
   var srcset = '';

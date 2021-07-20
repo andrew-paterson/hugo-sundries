@@ -1,16 +1,24 @@
+{{ $filepaths := slice}}
 {{- $gallery_path_static := printf "%s%s" "static" .gallery_path -}}
 {{- $static_path :=  $gallery_path_static -}}
 {{- $page_context := .context -}}
-{{- $path := .gallery_path -}}
+{{- $gallery_path := .gallery_path -}}
 {{- $thumbnail_sizes_attr := .thumbnail_sizes_attr -}}
-{{- $thumbnail_aspect_ratio := .thumbnail_aspect_ratio -}}
+{{- $thumbnail_aspect_ratio := (or .thumbnail_aspect_ratio "4:3") -}}
 {{- if fileExists $static_path -}}
+  {{- $files := readDir $static_path -}}
+  {{ range $files}}
+    {{- $filepaths = $filepaths | append (path.Join $gallery_path .Name) -}}
+  {{ end}}
+{{- end -}}
+{{ $gallery_list := .gallery_list}}
+{{ if $gallery_list }}
+  {{- $filepaths = $gallery_list }}
+{{ end }}
   <div class="image-gallery" data-thumbnail-dimensions="{{ $thumbnail_aspect_ratio }}" data-infinity-image-loader>
-    {{- $files := readDir $static_path -}}
-      {{- range $files -}}
-        {{- $file := . -}}
-        {{- $src := (print  $path "/" $file.Name) -}}
-        {{- $srcset := ( partial "hugo-sundries/srcset-from-clones.html" (dict "context" $page_context "image_path" (print  $path "/" $file.Name))) -}}
+      {{- range $filepaths -}}
+        {{- $src := . -}}
+        {{- $srcset := ( partial "hugo-sundries/srcset-from-clones.html" (dict "context" $page_context "image_path" $src)) -}}
         <a class="gallery-thumbnail" 
           data-fancybox="gallery"
           {{ printf "href=%q" $src | safeHTMLAttr }} 
@@ -19,11 +27,11 @@
           {{ printf "data-lazy-image-srcset=%q" $srcset | safeHTMLAttr }} 
           {{ printf "data-lazy-image-srcset-sizes=%q" $thumbnail_sizes_attr | safeHTMLAttr }} 
           style="display: none">
-          <div data-lazy-image-parent data-width-height-ratio="4:3"></div>
+          <div data-lazy-image-parent data-width-height-ratio={{ $thumbnail_aspect_ratio }}></div>
         </a>
       {{- end -}}
   </div>
-{{- end -}}
+
 
 
 
