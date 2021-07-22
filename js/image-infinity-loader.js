@@ -1,5 +1,4 @@
 // TODO data attribute for element unhide after image completes. 
-// Pass custom generateImageMarkup function.
 // Pass boolean to determine whether to unhide element as soon as image starts loading, or after loading is complete.
 // Dynamic pagination with url query params added- may require the ability to load images for the first time when scrolling up.
 var currentlyLoadingImages = false;
@@ -7,7 +6,7 @@ var infinityLoaderElements = document.querySelectorAll('[data-infinity-image-loa
 if (!infinityImageLoaderDefaults) {
   var infinityImageLoaderDefaults = {};
 }
-var loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more>Loading more Images</div>';
+var loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more><div class="loader"</div></div>';
 
 infinityLoaderElements.forEach(infinityLoaderElement => {
   doLazyLoad(infinityLoaderElement);
@@ -22,13 +21,53 @@ window.onresize = () => {
   });
 };
 
+let scrollSelectors;
+
 if (infinityImageLoaderDefaults.scrollElementSelector) {
-  document.querySelector(infinityImageLoaderDefaults.scrollElementSelector).onscroll = () => {
-    onScroll()
-  }
+  scrollSelectors = infinityImageLoaderDefaults.scrollElementSelector.split(',').map(item => {
+    const mediaQueryMatch = item.match(/\((.*?)\)\s(.*)/);
+    if (mediaQueryMatch) {
+      return {
+        mediaQuery: mediaQueryMatch[1],
+        selector: mediaQueryMatch[2],
+      }
+    } else {
+      return {
+        selector: item
+      }
+    }
+  });
+  scrollSelectors.forEach(item => {
+    if (item.mediaQuery) {
+      const MediaQueryList = window.matchMedia(`(${item.mediaQuery})`);
+      MediaQueryList.onchange = (e) => { handleDeviceChangeScrollElement(e, item)};
+      handleDeviceChangeScrollElement(MediaQueryList, item);
+    }
+  });
 } else {
   window.onscroll = () => {
     onScroll()
+  }
+}
+
+let customScrollSelector;
+function handleDeviceChangeScrollElement(e, item) {
+  if (customScrollSelector) {
+    document.querySelector(customScrollSelector).onscroll = null;
+  }
+  if (e.matches) {
+    customScrollSelector = item.selector
+  } else {
+    customScrollSelector = (scrollSelectors.find(item => !item.mediaQuery) || {}).selector;
+  }
+  if (customScrollSelector) {
+    document.querySelector(customScrollSelector).onscroll = () => {
+      onScroll()
+    }
+  } else {
+    window.onscroll = () => {
+      onScroll()
+    }
   }
 }
 
@@ -40,7 +79,7 @@ function onScroll() {
 
 function doLazyLoad(infinityLoaderElement) {
   infinityLoaderElement.insertAdjacentHTML('beforeend', loadingMoreImagesElement);
-  loadImageBatch(infinityLoaderElement);
+  MediaQueryList(infinityLoaderElement);
 }
 
 function generateImageMarkup(infinityLoaderItem) {
@@ -76,7 +115,7 @@ function thumbnailRequestComplete(infinityLoaderItem, currentBatch, infinityLoad
   }
 }
 
-function loadImageBatch(infinityLoaderElement) {
+function MediaQueryList(infinityLoaderElement) {
   currentlyLoadingImages = true;
   var batchSize;
   if (infinityLoaderElement.getAttribute('data-infinity-image-loader-batch-size')) {
@@ -116,11 +155,11 @@ function checkLoad(infinityLoaderElement) {
     }
     return;
   }
-
-  if (!visibleY(loadMoreEl) || currentlyLoadingImages) {
+  const loaderVisible = visibleY(loadMoreEl) && visibleX(loadMoreEl);
+  if (!loaderVisible || currentlyLoadingImages) {
     return;
   }
-  loadImageBatch(infinityLoaderElement);
+  MediaQueryList(infinityLoaderElement);
 }
 
 var visibleY = function(el){
@@ -140,7 +179,22 @@ var visibleY = function(el){
   return true
 };
 
-// TODO create visibleX version of the above.
+var visibleX = function(el){
+  var rect = el.getBoundingClientRect(), left = rect.left, width = rect.width, 
+    el = el.parentNode
+  // Check if right of the element is off the page
+  if (rect.right < 0) return false
+  // Check its within the document viewport
+  if (left > document.documentElement.clientWidth) return false
+  do {
+    rect = el.getBoundingClientRect()
+    if (left <= rect.right === false) return false
+    // Check if the element is out of view due to a container scrolling
+    if ((left + width) <= rect.left) return false
+    el = el.parentNode
+  } while (el != document.body)
+  return true
+};
 
 function setImageParentHeight(infinityLoaderItem) {
   if (infinityLoaderItem) {
