@@ -1,6 +1,8 @@
 // TODO data attribute for element unhide after image completes. 
 // Pass boolean to determine whether to unhide element as soon as image starts loading, or after loading is complete.
 // Dynamic pagination with url query params added- may require the ability to load images for the first time when scrolling up.
+// Different batch sizes for different media queries
+
 var currentlyLoadingImages = false;
 var infinityLoaderElements = document.querySelectorAll('[data-infinity-image-loader]');
 if (!infinityImageLoaderDefaults) {
@@ -21,11 +23,11 @@ window.onresize = () => {
   });
 };
 
-let scrollSelectors;
-
+let scrollSelectorObjects;
+let scrollSelectorMediaQueryLists = []
 if (infinityImageLoaderDefaults.scrollElementSelector) {
-  scrollSelectors = infinityImageLoaderDefaults.scrollElementSelector.split(',').map(item => {
-    const mediaQueryMatch = item.match(/\((.*?)\)\s(.*)/);
+  scrollSelectorObjects = infinityImageLoaderDefaults.scrollElementSelector.split(',').map(item => {
+    const mediaQueryMatch = item.match(/(\(.*?\))\s(.*)/);
     if (mediaQueryMatch) {
       return {
         mediaQuery: mediaQueryMatch[1],
@@ -37,13 +39,15 @@ if (infinityImageLoaderDefaults.scrollElementSelector) {
       }
     }
   });
-  scrollSelectors.forEach(item => {
+  scrollSelectorObjects.forEach(item => {
     if (item.mediaQuery) {
-      const MediaQueryList = window.matchMedia(`(${item.mediaQuery})`);
-      MediaQueryList.onchange = (e) => { handleDeviceChangeScrollElement(e, item)};
-      handleDeviceChangeScrollElement(MediaQueryList, item);
+      const MediaQueryList = window.matchMedia(item.mediaQuery);
+      scrollSelectorMediaQueryLists.push(MediaQueryList);
+      MediaQueryList.onchange = () => { handleDeviceChangeScrollElement()};
     }
   });
+  handleDeviceChangeScrollElement();
+
 } else {
   window.onscroll = () => {
     onScroll()
@@ -51,16 +55,18 @@ if (infinityImageLoaderDefaults.scrollElementSelector) {
 }
 
 let customScrollSelector;
-function handleDeviceChangeScrollElement(e, item) {
-  if (customScrollSelector) {
-    document.querySelector(customScrollSelector).onscroll = null;
-  }
-  if (e.matches) {
-    customScrollSelector = item.selector
+function handleDeviceChangeScrollElement() {
+  const previousScrollSelector = customScrollSelector;
+  const matchedMediaQueryList = scrollSelectorMediaQueryLists.find(scrollSelectorMediaQueryList => scrollSelectorMediaQueryList.matches);
+  if (matchedMediaQueryList) {
+    customScrollSelector = (scrollSelectorObjects.find(item => item.mediaQuery === matchedMediaQueryList.media) || {}).selector;
   } else {
-    customScrollSelector = (scrollSelectors.find(item => !item.mediaQuery) || {}).selector;
+    customScrollSelector = (scrollSelectorObjects.find(item => !item.mediaQuery) || {}).selector;
   }
   if (customScrollSelector) {
+    if (previousScrollSelector) {
+      document.querySelector(previousScrollSelector).onscroll = null;
+    }
     document.querySelector(customScrollSelector).onscroll = () => {
       onScroll()
     }
