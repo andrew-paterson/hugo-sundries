@@ -1,0 +1,45 @@
+<script>
+  function fetchJSONPromise(url, opts = {}) {
+    return new Promise((resolve, reject) => {
+      fetch(url, opts)
+        .then(response => response.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    })
+  }
+  var albumUrl = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=8cda53e1ad0382cccdc5fafedc1947e0&photoset_id=72157669145745445&user_id=124897308%40N04&format=json&nojsoncallback=1";
+
+  fetchJSONPromise(albumUrl).then(data => {
+    console.log(data);
+    data.photoset.photo.forEach(photo => {
+      const itemUrl = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=8cda53e1ad0382cccdc5fafedc1947e0&photo_id=" + photo.id + "&format=json&nojsoncallback=1";
+      const opts =   {
+        "async": true,
+        "crossDomain": true,
+        "method": "GET",
+        "headers": {}
+      }
+      fetchJSONPromise(itemUrl, opts).then(data => {
+        console.log(data)
+        let srcset = '';
+        data.sizes.size.forEach(size => {
+          srcset += size.source + " " + size.width + "w, ";
+        });
+        const src = "https://live.staticflickr.com/" + photo.server +"/" + photo.id + "_" + photo.secret + "_z.jpg";
+        const item = document.createElement("img");
+        item.setAttribute('src', src);
+        item.setAttribute('srcset', srcset);
+        item.setAttribute('sizes', '(max-width: 400px) 130px, 300px');
+        const gallery = document.querySelector('.flickr-gallery');
+        gallery.append(item);
+      })
+    
+      
+    })
+  });
+
+</script>
+<h2>Gallery</h2>
+<div class="flickr-gallery" data>
+
+</div>
