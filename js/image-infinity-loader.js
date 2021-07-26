@@ -5,14 +5,25 @@
 
 var currentlyLoadingImages = false;
 var infinityLoaderElements = document.querySelectorAll('[data-infinity-image-loader]');
+let scrollSelectorObjects;
+let scrollSelectorMediaQueryLists = [];
+let customScrollSelector;
+
 if (!infinityImageLoaderDefaults) {
   var infinityImageLoaderDefaults = {};
 }
 var loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more><div class="loader"</div></div>';
 
-infinityLoaderElements.forEach(infinityLoaderElement => {
-  doLazyLoad(infinityLoaderElement);
-});
+// infinityLoaderElements.forEach(infinityLoaderElement => {
+//   doLazyLoad(infinityLoaderElement);
+// });
+
+function initLazyLoad() {
+  console.log('init');
+  infinityLoaderElements.forEach(infinityLoaderElement => {
+    doLazyLoad(infinityLoaderElement);
+  });
+
 
 window.onresize = () => {
   infinityLoaderElements.forEach(infinityLoaderElement => {
@@ -23,8 +34,7 @@ window.onresize = () => {
   });
 };
 
-let scrollSelectorObjects;
-let scrollSelectorMediaQueryLists = []
+
 if (infinityImageLoaderDefaults.scrollElementSelector) {
   scrollSelectorObjects = infinityImageLoaderDefaults.scrollElementSelector.split(',').map(item => {
     const mediaQueryMatch = item.match(/(\(.*?\))\s(.*)/);
@@ -54,7 +64,8 @@ if (infinityImageLoaderDefaults.scrollElementSelector) {
   }
 }
 
-let customScrollSelector;
+}
+
 function handleDeviceChangeScrollElement() {
   const previousScrollSelector = customScrollSelector;
   const matchedMediaQueryList = scrollSelectorMediaQueryLists.find(scrollSelectorMediaQueryList => scrollSelectorMediaQueryList.matches);
@@ -84,8 +95,9 @@ function onScroll() {
 }
 
 function doLazyLoad(infinityLoaderElement) {
+  console.log('doLazyLoad')
   infinityLoaderElement.insertAdjacentHTML('beforeend', loadingMoreImagesElement);
-  MediaQueryList(infinityLoaderElement);
+  loadImageBatch(infinityLoaderElement);
 }
 
 function generateImageMarkup(infinityLoaderItem) {
@@ -121,7 +133,7 @@ function thumbnailRequestComplete(infinityLoaderItem, currentBatch, infinityLoad
   }
 }
 
-function MediaQueryList(infinityLoaderElement) {
+function loadImageBatch(infinityLoaderElement) {
   currentlyLoadingImages = true;
   var batchSize;
   if (infinityLoaderElement.getAttribute('data-infinity-image-loader-batch-size')) {
@@ -165,7 +177,7 @@ function checkLoad(infinityLoaderElement) {
   if (!loaderVisible || currentlyLoadingImages) {
     return;
   }
-  MediaQueryList(infinityLoaderElement);
+  loadImageBatch(infinityLoaderElement);
 }
 
 var visibleY = function(el){
