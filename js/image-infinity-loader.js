@@ -8,62 +8,53 @@ var infinityLoaderElements = document.querySelectorAll('[data-infinity-image-loa
 let scrollSelectorObjects;
 let scrollSelectorMediaQueryLists = [];
 let customScrollSelector;
+let infinityImageLoaderDefaults;
+var loadingMoreImagesElement;
 
-if (!infinityImageLoaderDefaults) {
-  var infinityImageLoaderDefaults = {};
-}
-var loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more><div class="loader"</div></div>';
-
-// infinityLoaderElements.forEach(infinityLoaderElement => {
-//   doLazyLoad(infinityLoaderElement);
-// });
-
-function initLazyLoad() {
-  console.log('init');
+function initLazyLoad(opts = {}) {
+  infinityImageLoaderDefaults = opts;
+  loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more><div class="loader"</div></div>';
+  
   infinityLoaderElements.forEach(infinityLoaderElement => {
     doLazyLoad(infinityLoaderElement);
   });
 
-
-window.onresize = () => {
-  infinityLoaderElements.forEach(infinityLoaderElement => {
-    var infinityLoaderItems = infinityLoaderElement.querySelectorAll('[data-lazy-image-src]'); // TODO select by data attr
-    infinityLoaderItems.forEach(infinityLoaderItem => {
-      setImageParentHeight(infinityLoaderItem);
+  window.onresize = () => {
+    infinityLoaderElements.forEach(infinityLoaderElement => {
+      var infinityLoaderItems = infinityLoaderElement.querySelectorAll('[data-lazy-image-src]');
+      infinityLoaderItems.forEach(infinityLoaderItem => {
+        setImageParentHeight(infinityLoaderItem);
+      });
     });
-  });
-};
+  };
 
-
-if (infinityImageLoaderDefaults.scrollElementSelector) {
-  scrollSelectorObjects = infinityImageLoaderDefaults.scrollElementSelector.split(',').map(item => {
-    const mediaQueryMatch = item.match(/(\(.*?\))\s(.*)/);
-    if (mediaQueryMatch) {
-      return {
-        mediaQuery: mediaQueryMatch[1],
-        selector: mediaQueryMatch[2],
+  if (infinityImageLoaderDefaults.scrollElementSelector) {
+    scrollSelectorObjects = infinityImageLoaderDefaults.scrollElementSelector.split(',').map(item => {
+      const mediaQueryMatch = item.match(/(\(.*?\))\s(.*)/);
+      if (mediaQueryMatch) {
+        return {
+          mediaQuery: mediaQueryMatch[1],
+          selector: mediaQueryMatch[2],
+        }
+      } else {
+        return {
+          selector: item
+        }
       }
-    } else {
-      return {
-        selector: item
+    });
+    scrollSelectorObjects.forEach(item => {
+      if (item.mediaQuery) {
+        const MediaQueryList = window.matchMedia(item.mediaQuery);
+        scrollSelectorMediaQueryLists.push(MediaQueryList);
+        MediaQueryList.onchange = () => { handleDeviceChangeScrollElement()};
       }
+    });
+    handleDeviceChangeScrollElement();
+  } else {
+    window.onscroll = () => {
+      onScroll()
     }
-  });
-  scrollSelectorObjects.forEach(item => {
-    if (item.mediaQuery) {
-      const MediaQueryList = window.matchMedia(item.mediaQuery);
-      scrollSelectorMediaQueryLists.push(MediaQueryList);
-      MediaQueryList.onchange = () => { handleDeviceChangeScrollElement()};
-    }
-  });
-  handleDeviceChangeScrollElement();
-
-} else {
-  window.onscroll = () => {
-    onScroll()
   }
-}
-
 }
 
 function handleDeviceChangeScrollElement() {
@@ -95,7 +86,6 @@ function onScroll() {
 }
 
 function doLazyLoad(infinityLoaderElement) {
-  console.log('doLazyLoad')
   infinityLoaderElement.insertAdjacentHTML('beforeend', loadingMoreImagesElement);
   loadImageBatch(infinityLoaderElement);
 }

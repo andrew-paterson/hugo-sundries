@@ -1,3 +1,9 @@
+{{ $flickr_api_key := (or .flickr_api_key .context.Site.Params.flickr_api_key) }}
+{{ $flickr_user_id := (or .flickr_user_id .context.Site.Params.flickr_user_id) }}
+{{ $photoset_id := .photoset_id }}
+{{ if .photoset_url }}
+  {{ $photoset_id = (path.Base .photoset_url)}}
+{{ end }}
 <script>
   function fetchJSONPromise(url, opts = {}) {
     return new Promise((resolve, reject) => {
@@ -7,61 +13,86 @@
         .catch(err => reject(err));
     })
   }
-  var albumUrl = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=8cda53e1ad0382cccdc5fafedc1947e0&photoset_id=72157669145745445&user_id=124897308%40N04&format=json&nojsoncallback=1";
+  var albumUrl = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key={{ $flickr_api_key }}&photoset_id={{ $photoset_id }}&user_id={{ $flickr_user_id }}&format=json&nojsoncallback=1";
 
-  function getItemSizes(itemUrl) {
-    return new Promise((resolve, reject) => {
-      const opts =   {
-        "async": true,
-        "crossDomain": true,
-        "method": "GET",
-        "headers": {}
-      }
-
-      fetchJSONPromise(itemUrl, opts).then(data => {
-        console.log(data)
-
-        resolve(data);
-      }).catch(err => {
-        reject(err);
-      })
-    })
-  }
+  const flickrSizes = [{
+      label: "Square",
+      suffix: "_s",
+      max: 75
+    },
+    {
+      label: "Large Square",
+      suffix: "_q",
+      max: 150
+    },
+    {
+      label: "Thumbnail",
+      suffix: "_t",
+      max: 100
+    },
+    {
+      label: "Small",
+      suffix: "_m",
+      max: 240
+    },
+    {
+      label: "Small 320",
+      suffix: "_n",
+      max: 320
+    },
+    {
+      label: "Small 400",
+      suffix: "_w",
+      max: 400
+    },
+    {
+      label: "Medium",
+      suffix: "",
+      max: 500
+    },
+    {
+      label: "Medium 640",
+      suffix: "_z",
+      max: 640
+    },
+    {
+      label: "Medium 800",
+      suffix: "_c",
+      max: 800
+    },
+    {
+      label: "Large",
+      suffix: "_b",
+      max: 1024
+    }
+  ];
 
   fetchJSONPromise(albumUrl).then(data => {
-    console.log(data);
-    const itemPromises = data.photoset.photo.map(photo => {
-      const itemUrl = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=8cda53e1ad0382cccdc5fafedc1947e0&photo_id=" + photo.id + "&format=json&nojsoncallback=1";
-      return getItemSizes(itemUrl);
-    });
-    Promise.all(itemPromises).then((dataArray) => {
-      console.log('Done')
-      dataArray.forEach(image => {
-        let srcset = '';
-        image.sizes.size.forEach(size => {
-          srcset += size.source + " " + size.width + "w, ";
-        });
-        const src = image.sizes.size.find(item => item.label === 'Medium').source;
-        const item = document.createElement('a');
-        item.classList.add('gallery-thumbnail');
-        item.setAttribute('href', src);
-        item.setAttribute('data-lazy-image-src', src);
-        item.setAttribute('data-srcset', srcset);
-        item.setAttribute('data-lazy-image-srcset', srcset);
-        item.setAttribute('data-lazy-image-srcset-sizes', '(max-width: 400px) 130px, 300px');
-        item.setAttribute('data-fancybox', 'gallery');
-        const innerDiv = document.createElement('div');
-        innerDiv.setAttribute('data-lazy-image-parent', true);
-        innerDiv.setAttribute('data-width-height-ratio', "4:3");
-        item.append(innerDiv);
-        const gallery = document.querySelector('.flickr-gallery');
-        gallery.append(item);
+    data.photoset.photo.forEach(photo => {
+      const imageUrlBase = "https://live.staticflickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret;
+      const src = imageUrlBase + ".jpg";
+      const item = document.createElement('a');
+      let srcset = '';
+      flickrSizes.forEach(item => {
+        srcset += imageUrlBase + item.suffix + ".jpg " + parseInt(0.75*item.max) + "w, ";
       })
-        
-      initLazyLoad();
-    });
+      item.classList.add('gallery-thumbnail');
+      item.setAttribute('href', src.replace('.jpg', '_b.jpg'));
+      item.setAttribute('data-lazy-image-src', src);
+      item.setAttribute('data-srcset', srcset);
+      item.setAttribute('data-lazy-image-srcset', srcset);
+      item.setAttribute('data-lazy-image-srcset-sizes', '(max-width: 400px) 130px, 300px');
+      item.setAttribute('data-fancybox', 'gallery');
+      item.setAttribute('data-flickr-id', photo.id);
+      const innerDiv = document.createElement('div');
+      innerDiv.setAttribute('data-lazy-image-parent', true);
+      innerDiv.setAttribute('data-width-height-ratio', "4:3");
+      item.append(innerDiv);
+      const gallery = document.querySelector('.flickr-gallery');
+      gallery.append(item);
+    })
+    flickrGalleryLoaded();
   });
-
 </script>
 <h2>Gallery</h2>
 <div class="flickr-gallery image-gallery" data-thumbnail-dimensions="4:3" data-infinity-image-loader>
