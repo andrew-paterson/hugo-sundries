@@ -1,0 +1,31 @@
+{{ if gt (len .image_path) 0 }}
+{{- if .caption -}}<figure class="{{ .class }}">{{- end -}}
+{{- if .image_link -}}<a href="{{ .image_link }}" class={{ .image_link_class }}>{{- end -}}
+<img srcset="{{ .srcset }}"
+  src="{{ .image_path }}"
+  {{ if .sizes }}
+    sizes="{{ .sizes }}"
+  {{ end }}
+  {{ if .alt }}
+    alt="{{ .alt }}"
+  {{ end }}
+  {{ if .title }}
+    title="{{ .title }}"
+  {{ end }}
+  {{ if .data_dimensions }}
+    data-dimensions="{{ .data_dimensions }}"
+  {{ end }}
+  {{ if .data_object_fit }}
+    data-object-fit="{{ .data_object_fit }}"
+  {{ end }}
+  {{ if (and .class (not .caption) )}}
+    class="{{ .class }}"
+  {{ end }}
+  {{ .img_attrs | safeHTMLAttr }}
+/>
+{{- if .image_link -}}</a>{{- end -}}
+{{- if .caption -}}
+<figcaption>{{ .caption }}</figcaption>
+</figure>
+{{- end -}}
+{{ end }}

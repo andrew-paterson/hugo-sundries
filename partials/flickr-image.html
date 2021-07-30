@@ -1,0 +1,12 @@
+{{ $bb_code := .bb_code }}
+{{ $re := `\[url=.*?\]\[img\](.*?)\[/img\].*?\[url=(.*?)\](.*?)\[/url] by \[url=(.*?)\](.*?)\[/url].*` }}
+
+{{ $image_src := $bb_code | replaceRE $re "$1"  }}<br>
+{{ $flickr_url := $bb_code | replaceRE $re "$2"  }}<br>
+{{ $flickr_caption := $bb_code | replaceRE $re "$3"  }}<br>
+{{ $flickr_user_url := $bb_code | replaceRE $re "$4"  }}<br>
+{{ $flickr_user_name := $bb_code | replaceRE $re "$5"  }}<br>
+
+{{ $srcset := partial "hugo-sundries/flickr-srcset.html" $image_src }}
+
+{{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $flickr_caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" .img_attrs "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit)}}

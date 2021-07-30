@@ -1,0 +1,16 @@
+{{ $flickr_sizes := slice (dict "label" "Square" "suffix" "_s" "max" 75 ) (dict "label" "Large Square" "suffix" "_q" "max" 150 ) (dict "label" "Thumbnail" "suffix" "_t" "max" 100 ) (dict "label" "Small" "suffix" "_m" "max" 240 ) (dict "label" "Small 320" "suffix" "_n" "max" 320 ) (dict "label" "Small 400" "suffix" "_w" "max" 400 ) (dict "label" "Medium" "suffix" "" "max" 500 ) (dict "label" "Medium 640" "suffix" "_z" "max" 640 ) (dict "label" "Medium 800" "suffix" "_c" "max" 800 ) (dict "label" "Large" "suffix" "_b" "max" 1024 )}}
+
+
+{{ $big_suffix := . | findRE `.*_(h|k|o|3k|4k|5k|6k|o).[a-zA-Z]{3,4}`  }}
+{{ $final := ""}}
+<script>console.log({{ $big_suffix }})</script>
+{{ if (not $big_suffix) }}
+  {{- $image_extension := path.Ext . -}}
+  {{ $image_path_no_suffix := . | replaceRE `(.*)_.*` "$1"  }}
+  {{- $items := slice -}}
+  {{- range $flickr_sizes -}}
+    {{- $items = $items | append (print $image_path_no_suffix .suffix $image_extension " " (math.Round (mul 0.75 .max)) "w") -}}
+  {{- end -}}
+  {{ $final = delimit $items ", " }}
+{{ end }}
+{{- return $final -}}
