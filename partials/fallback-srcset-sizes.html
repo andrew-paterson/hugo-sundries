@@ -1,21 +1,10 @@
 {{ $auto_sizes := "" }}
-{{ if (eq .type "list_item") }}
-  {{ $section_list_item_max_width := "" }}
-  {{ if .context.Page.Parent }}
-    {{ $section_list_item_max_width = .context.Page.Parent.Params.content_list_item_max_width }}
-  {{ end }}
-  {{ $list_item_max_width := (or $section_list_item_max_width .context.Site.Params.content_list_item_max_width)}}
-  {{ if $list_item_max_width }}
-      {{ $auto_sizes = (print "(min-width: " $list_item_max_width ") " $list_item_max_width) }}
-  {{ end }}
-{{ else if  (eq .type "post") }}
-  {{ $section_post_max_width := "" }}
-  {{ if .context.Page.Parent }}
-    {{ $section_post_max_width = .context.Page.Parent.Params.post_max_width }}
-  {{ end }}
-  {{ $post_max_width := (or .context.Page.Params.post_max_width $section_post_max_width .context.Site.Params.post_max_width)}}
-  {{ if $post_max_width }}
-      {{ $auto_sizes = (print "(min-width: " $post_max_width ") " $post_max_width) }}
-  {{ end }}
+{{ $section_post_max_width := "" }}
+{{ if .Page.Parent }}
+  {{ $section_post_max_width = .Page.Parent.Params.post_max_width }}
+{{ end }}
+{{ $post_max_width := (or .Page.Params.post_max_width $section_post_max_width .Site.Params.post_max_width)}}
+{{ if $post_max_width }}
+    {{ $auto_sizes = (print "(min-width: " $post_max_width ") " $post_max_width) }}
 {{ end }}
 {{ return $auto_sizes }}

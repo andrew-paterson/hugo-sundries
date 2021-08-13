@@ -1,41 +1,28 @@
 $sizes: (25, 33, 50, 66, 100);
 
-@each $size in $sizes {
-  .max-width-#{$size} {
-    max-width: #{$size}#{"%"};
-  }
-}
-
-.responsive-image-align-center {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-.responsive-image-align-right {
-  margin-left: auto;
-  display: block;
-}
-
-.responsive-image-wrap-text {
-  margin-bottom: $spacer-lg;
+.responsive-image {
+  margin-bottom: $spacer-md;
   @each $size in $sizes {
     &.max-width-#{$size} {
       $size: #{$size}#{"%"};
-      max-width: calc(#{$size} - #{$spacer-md})
+      max-width: calc(#{$size} - #{$spacer-md});
+      float: left;
+      margin-right: $spacer-md;
     }
   }
-  &.responsive-image-align-left {
-    float: left;
-    margin-right: $spacer-md;
+  + *:not(.responsive-image) {
+    clear: both;
+  }
+  &.responsive-image-align-center {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    float: none;
   }
   &.responsive-image-align-right {
     float: right;
-    margin-left: $spacer-md;
   }
 }
-
-
 
 .embedded-video {
   clear: both;

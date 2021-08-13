@@ -1,9 +1,10 @@
 {{- $image_path := ( or (.Get "image_path") "") -}}
-{{ $sizes := (or (.Get "sizes") (partial "hugo-sundries/fallback-srcset-sizes.html" (dict "context" . "type" "post" )))}}
+{{ $sizes := (or (.Get "sizes") (partial "hugo-sundries/fallback-srcset-sizes.html" . ))}}
 {{- $caption := (.Get "caption") -}}
 {{- $image_link := (.Get "image_link") -}}
 {{- $image_link_class := (.Get "image_link_class") -}}
 {{- $class := (.Get "class") }}
+{{- $class = (print $class " responsive-image") }}
 {{- if (.Get "max_width") -}}
   {{ $max_width_num := strings.TrimSuffix "%" (.Get "max_width") }}
   {{- $class = (print $class " max-width-" $max_width_num) }}
@@ -34,8 +35,8 @@
   {{ if (.Get "data_object_fit") }}
     data-object-fit="{{ (.Get "data_object_fit") }}"
   {{ end }}
-  {{ if (and (.Get "class") (not (.Get "caption")) )}}
-    class="{{ (.Get "class") }}"
+  {{ if (and $class (not $caption) )}}
+    class="{{ $class }}"
   {{ end }}
   {{ (.Get "img_attrs") | safeHTMLAttr }}
 />

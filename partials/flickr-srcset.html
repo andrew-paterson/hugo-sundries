@@ -3,7 +3,6 @@
 
 {{ $big_suffix := . | findRE `.*_(h|k|o|3k|4k|5k|6k|o).[a-zA-Z]{3,4}`  }}
 {{ $final := ""}}
-<script>console.log({{ $big_suffix }})</script>
 {{ if (not $big_suffix) }}
   {{- $image_extension := path.Ext . -}}
   {{ $image_path_no_suffix := . | replaceRE `(.*)_.*` "$1"  }}

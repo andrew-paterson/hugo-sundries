@@ -1,12 +1,48 @@
 {{ $bb_code := .bb_code }}
-{{ $re := `\[url=.*?\]\[img\](.*?)\[/img\].*?\[url=(.*?)\](.*?)\[/url] by \[url=(.*?)\](.*?)\[/url].*` }}
+{{ $html := .html }}
+<script>console.log({{ .html }})</script>
 
-{{ $image_src := $bb_code | replaceRE $re "$1"  }}<br>
-{{ $flickr_url := $bb_code | replaceRE $re "$2"  }}<br>
-{{ $flickr_caption := $bb_code | replaceRE $re "$3"  }}<br>
-{{ $flickr_user_url := $bb_code | replaceRE $re "$4"  }}<br>
-{{ $flickr_user_name := $bb_code | replaceRE $re "$5"  }}<br>
+{{ $image_src := "" }}
+{{ $flickr_url := "" }}
+{{ $flickr_caption := "" }}
+{{ $flickr_user_url := "" }}
+{{ $flickr_user_name := "" }}
 
+{{ if $bb_code }}
+  {{ $re := `\[url=.*?\]\[img\](.*?)\[/img\].*?\[url=(.*?)\](.*?)\[/url] by \[url=(.*?)\](.*?)\[/url].*` }}
+  {{ $image_src = $bb_code | replaceRE $re "$1"  }}
+  {{ $flickr_url = $bb_code | replaceRE $re "$2"  }}
+  {{ $flickr_caption = $bb_code | replaceRE $re "$3"  }}
+  {{ $flickr_user_url = $bb_code | replaceRE $re "$4"  }}
+  {{ $flickr_user_name = $bb_code | replaceRE $re "$5"  }}
+{{ else }}
+  {{ $re := `.*<a.*href="(.*?)".*title="(.*?)".*<img src="(.*?)".*alt="(.*?)".*` }}
+  {{ $image_src = $html | replaceRE $re "$3"  }}
+  {{ $flickr_url = $html | replaceRE $re "$1"  }}
+  {{ $flickr_caption = $html | replaceRE $re "$4"  }}
+{{ end}}
 {{ $srcset := partial "hugo-sundries/flickr-srcset.html" $image_src }}
+<script>console.log({{ $image_src }})</script>
+<script>
+  console.log('ytest')
+  const photoId = '16104409562';
+  const url = `https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=8cda53e1ad0382cccdc5fafedc1947e0&photo_id=${photoId}&format=json&nojsoncallback=1`;
+  function fetchJSONPromise(url, opts) {
+    return new Promise((resolve, reject) => {
+      fetch(url, opts)
+        .then(response => response.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    })
+  }
+  fetchJSONPromise(albumUrl, {
+    "async": true,
+    "crossDomain": true,
+    "method": "GET",
+    "headers": {}
+  }).then(data => {
+    console.log(data);
+  });
+</script>
 
 {{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $flickr_caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" .img_attrs "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit)}}
