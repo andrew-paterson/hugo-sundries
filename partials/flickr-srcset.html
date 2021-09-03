@@ -1,6 +1,5 @@
 {{ $flickr_sizes := slice (dict "label" "Square" "suffix" "_s" "max" 75 ) (dict "label" "Large Square" "suffix" "_q" "max" 150 ) (dict "label" "Thumbnail" "suffix" "_t" "max" 100 ) (dict "label" "Small" "suffix" "_m" "max" 240 ) (dict "label" "Small 320" "suffix" "_n" "max" 320 ) (dict "label" "Small 400" "suffix" "_w" "max" 400 ) (dict "label" "Medium" "suffix" "" "max" 500 ) (dict "label" "Medium 640" "suffix" "_z" "max" 640 ) (dict "label" "Medium 800" "suffix" "_c" "max" 800 ) (dict "label" "Large" "suffix" "_b" "max" 1024 )}}
 
-
 {{ $big_suffix := . | findRE `.*_(h|k|o|3k|4k|5k|6k|o).[a-zA-Z]{3,4}`  }}
 {{ $final := ""}}
 {{ if (not $big_suffix) }}
