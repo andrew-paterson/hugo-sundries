@@ -13,7 +13,7 @@ var loadingMoreImagesElement;
 
 function initLazyLoad(opts = {}) {
   infinityImageLoaderDefaults = opts;
-  loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more><div class="loader"</div></div>';
+  loadingMoreImagesElement = infinityImageLoaderDefaults.loadingElement || '<div class="load-more-images" data-infinity-image-loader-load-more><div class="loader"></div></div>';
   
   infinityLoaderElements.forEach(infinityLoaderElement => {
     doLazyLoad(infinityLoaderElement);

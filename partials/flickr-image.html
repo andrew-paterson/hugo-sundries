@@ -1,6 +1,7 @@
 {{ $bb_code := .bb_code }}
 {{ $html := .html }}
-<script>console.log({{ .html }})</script>
+{{ $caption := "" }}
+<script>console.log({{ .sizes }})</script>
 
 {{ $image_src := "" }}
 {{ $flickr_url := "" }}
@@ -24,13 +25,22 @@
 {{ $srcset := partial "hugo-sundries/flickr-srcset.html" $image_src }}
 {{ $flickr_id := (path.Base $image_src) | replaceRE `(.*?)_.*` "$1"}}
 {{ if (eq $srcset "") }}
-  <img data-flickr-image-id={{ $flickr_id }} />
+  <a href="{{ $flickr_url}} ">
+    <img data-flickr-image-id={{ $flickr_id }} sizes={{ .sizes }} />
+  </a>
 {{ else }}
-{{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $flickr_caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" .img_attrs "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit)}}
+  {{ if (eq .caption true) }}
+    {{ $caption = $flickr_caption }}
+  {{ else if .caption }}
+    {{ $caption = .caption }}
+  {{ end }}
+
+  {{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" .img_attrs "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit)}}
 {{ end }}
 <script>
   const flickrIdImages = Array.from(document.querySelectorAll('[data-flickr-image-id]'));
   flickrIdImages.forEach(flickrIdImage => {
+    flickrIdImage.classList.add('loader');
     const photoId = flickrIdImage.getAttribute('data-flickr-image-id');
     const url = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=8cda53e1ad0382cccdc5fafedc1947e0&photo_id=" + photoId + "&format=json&nojsoncallback=1";
     function fetchJSONPromise(url, opts) {
@@ -47,14 +57,13 @@
       "method": "GET",
       "headers": {}
     }).then(data => {
-      console.log(data);
       let srcset = '';
       data.sizes.size.forEach(size => {
         if (size.width <= 1600) {
           srcset += size.source + " " + size.width + "w, " 
         }
       });
-      console.log(srcset)
+      flickrIdImage.classList.remove('loader');
       flickrIdImage.srcset = srcset;
     });
   });

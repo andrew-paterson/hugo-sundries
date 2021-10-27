@@ -1,0 +1,5 @@
+{{ $bb_code := ( .Get "bb_code" ) }}
+{{ $html := ( .Get "html" ) }}
+{{ $caption := ( .Get "caption" ) }}
+{{ $sizes := (or (.Get "sizes") (partial "hugo-sundries/fallback-srcset-sizes.html" . ))}}
+{{ partial "hugo-sundries/flickr-image.html" (dict "html" $html "bb_code" $bb_code "caption" $caption "sizes" $sizes) }}

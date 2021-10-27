@@ -89,6 +89,29 @@ Embeds a YouTube video. Simply pass the YouTube url as shown below.
 ## Google map
 
     {{ partial "hugo-sundries/google-map.html" **Maps URL** }}
+
+## Flickr image
+
+
+Provide either the Flickr HTML Embed code as "html"
+
+    {{ partial "hugo-sundries/flickr-image.html" (dict "html" .Params.embed_code) }}
+
+or  the Flickr BB code as "bb_code"
+
+    {{ partial "hugo-sundries/flickr-image.html" (dict "bb_code" .Params.bb_code) }}
+
+### Caption
+
+If a string is passed as `caption`, the image will use that string as the caption.
+
+  {{ partial "hugo-sundries/flickr-image.html" (dict "bb_code" .Params.bb_code "caption" "This is the caption for the image") }}
+
+If a `true` is passed as `caption`, the image will use the FLickr image title as the caption.
+
+  {{ partial "hugo-sundries/flickr-image.html" (dict "bb_code" .Params.bb_code "caption" true) }}
+
+Will download thew image sizes first, if thewy cannot be determined from the embed code.
 ## Image gallery
 
 Creates an grid layout of thumbnails from the images in a folder, and lazy loads them using the [below](#infinity-image-loader). Designed for se in conjunction with Fancybox 3. The thumbnails are generated using the [responsive image partial](#responsive-image).
