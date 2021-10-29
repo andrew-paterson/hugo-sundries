@@ -5,7 +5,7 @@
   {{ $photoset_id = (path.Base .photoset_url)}}
 {{ end }}
 <div class="flickr-gallery image-gallery" data-thumbnail-dimensions="4:3" data-infinity-image-loader>
-  <div class="load-more-images width-100" data-infinity-image-loader-load-more><div class="loader"></div></div>
+  <div class="initial-loader loader"></div>
 </div>
 
 <script>
@@ -70,7 +70,11 @@
       max: 1024
     }
   ];
+  const initialLoader = document.querySelector('.initial-loader');
+
+
   fetchJSONPromise(albumUrl).then(data => {
+    initialLoader.remove();
     data.photoset.photo.forEach(photo => {
       const imageUrlBase = "https://live.staticflickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret;
       const src = imageUrlBase + ".jpg";
@@ -87,6 +91,9 @@
       item.setAttribute('data-lazy-image-srcset-sizes', '(max-width: 400px) 130px, 300px');
       item.setAttribute('data-fancybox', 'gallery');
       item.setAttribute('data-flickr-id', photo.id);
+      if ({{ .flickr_captions }}) {
+        item.setAttribute('data-caption', photo.title);
+      }
       const innerDiv = document.createElement('div');
       innerDiv.setAttribute('data-lazy-image-parent', true);
       innerDiv.setAttribute('data-width-height-ratio', "4:3");
@@ -96,4 +103,17 @@
     });
     flickrGalleryLoaded();
   });
+</script>
+{{ partial "hugo-sundries/script-bundle.html" (dict "context" . "output_path" "js/gallery.js" "source_files" (slice "js/hugo-sundries/addons/fancybox-4.js" "js/hugo-sundries/image-infinity-loader.js|babel")) }}
+<script>
+  Fancybox.bind('[data-fancybox="gallery"]', {
+    Thumbs: false,
+    closeButton: "top"
+  });
+  function flickrGalleryLoaded() {
+    initLazyLoad({
+      scrollElementSelector: '#wrapper',
+      batchSize: 12,
+    });
+  }
 </script>

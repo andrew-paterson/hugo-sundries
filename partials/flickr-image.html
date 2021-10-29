@@ -24,6 +24,17 @@
 {{ end}}
 {{ $srcset := partial "hugo-sundries/flickr-srcset.html" $image_src }}
 {{ $flickr_id := (path.Base $image_src) | replaceRE `(.*?)_.*` "$1"}}
+
+{{ if (eq .caption true) }}
+  {{ $caption = $flickr_caption }}
+{{ else if .caption }}
+  {{ $caption = .caption }}
+{{ end }}
+
+{{ $img_attrs := (or .img_attrs "")}}
+
+{{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" (print $img_attrs " data_flickr_id=" $flickr_id ) "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit )}}
+
 {{ if (eq $srcset "") }}
   <a href="{{ $flickr_url}} ">
     <img data-flickr-image-id={{ $flickr_id }} sizes={{ .sizes }} />
