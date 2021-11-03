@@ -1,0 +1,76 @@
+@media (min-width: 980px) {
+  #portfolio-strip {
+    display: block;
+    width: 100%;
+    position: relative;
+    .image-gallery {
+      max-width: 100%;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      a.gallery-thumbnail {
+        width: auto !important;
+        > div {
+          height: auto !important;
+        }
+        img {
+          height: 500px;
+          width: auto;
+          margin: 0;
+        }
+        margin: 0 2px;
+        flex-shrink: 0;
+        &:first-child {
+          margin-left: 0;
+        }
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+    div.scroll-button {
+      display: none;
+      position: absolute;
+      top: 50%;
+      height: 50px;
+      width: 50px;
+      background-color: rgba(0,0,0,0.8);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 20px  auto;
+      margin-top: -25px;
+      @include box-shadow(bottomRight);
+    }
+    
+    div.scroll-button:hover {
+      background-color: #222;
+      cursor: pointer;
+      
+    }
+    
+    div.scroll-button.forward {
+      right: 0px;
+      background-image: $svg-data-uri-arrow-right;
+    }
+    
+    div.scroll-button.back {
+      left: 0px;
+      background-image: $svg-data-uri-arrow-left;
+    }
+    .load-more-images {
+      width: 333px;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      background: #eee;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.fancybox-is-open .fancybox-bg {
+  opacity: 1;
+}
+
+.fancybox-button[disabled] {
+  display: none;
+}
