@@ -1,13 +1,23 @@
 $sizes: (25, 33, 50, 66, 100);
 
 .responsive-image {
-  margin-bottom: $spacer-md;
+  margin-bottom: $spacer-lg;
   @each $size in $sizes {
     &.max-width-#{$size} {
       $size: #{$size}#{"%"};
       max-width: calc(#{$size} - #{$spacer-md});
       float: left;
       margin-right: $spacer-md;
+    }
+  }
+  @media (min-width: 980px) {
+    @each $size in $sizes {
+      &.desktop-max-width-#{$size} {
+        $size: #{$size}#{"%"};
+        max-width: calc(#{$size} - #{$spacer-md});
+        float: left;
+        margin-right: $spacer-md;
+      }
     }
   }
   + *:not(.responsive-image) {

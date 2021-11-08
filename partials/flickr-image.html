@@ -1,8 +1,6 @@
 {{ $bb_code := .bb_code }}
 {{ $html := .html }}
 {{ $caption := "" }}
-<script>console.log({{ .sizes }})</script>
-
 {{ $image_src := "" }}
 {{ $flickr_url := "" }}
 {{ $flickr_caption := "" }}
@@ -33,26 +31,19 @@
 
 {{ $img_attrs := (or .img_attrs "")}}
 
-{{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" (print $img_attrs " data_flickr_id=" $flickr_id ) "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit )}}
+{{ $markup := partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" $img_attrs "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit )}}
 
-{{ if (eq $srcset "") }}
-  <a href="{{ $flickr_url}} ">
-    <img data-flickr-image-id={{ $flickr_id }} sizes={{ .sizes }} />
-  </a>
+{{ if gt (len (or $srcset "")) 0 }}
+  {{ $markup }}
 {{ else }}
-  {{ if (eq .caption true) }}
-    {{ $caption = $flickr_caption }}
-  {{ else if .caption }}
-    {{ $caption = .caption }}
-  {{ end }}
-
-  {{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_src "srcset" $srcset "image_link" $flickr_url "caption" $caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" .img_attrs "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit)}}
+  <div data-flickr-image-placeholder data-flickr-image-id={{ $flickr_id }} data-dimensions="{{ .data_dimensions }}" style="width:100%;display:flex; align-items:center;">
+  <div class="loader"></div></div>
 {{ end }}
 <script>
-  const flickrIdImages = Array.from(document.querySelectorAll('[data-flickr-image-id]'));
-  flickrIdImages.forEach(flickrIdImage => {
-    flickrIdImage.classList.add('loader');
-    const photoId = flickrIdImage.getAttribute('data-flickr-image-id');
+  const flickrImagePlaceholders = Array.from(document.querySelectorAll('[data-flickr-image-placeholder]'));
+  flickrImagePlaceholders.forEach(flickrImagePlaceholder => {
+    let el = {{ $markup }};
+    const photoId = flickrImagePlaceholder.getAttribute('data-flickr-image-id');
     const url = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=8cda53e1ad0382cccdc5fafedc1947e0&photo_id=" + photoId + "&format=json&nojsoncallback=1";
     function fetchJSONPromise(url, opts) {
       return new Promise((resolve, reject) => {
@@ -69,13 +60,26 @@
       "headers": {}
     }).then(data => {
       let srcset = '';
-      data.sizes.size.forEach(size => {
+      const sizesInRange = data.sizes.size.filter(size => size.width <= 1600).sort((a, b) => {
+        return b.width - a.width;
+      });
+      console.log(sizesInRange);
+      sizesInRange.forEach(size => {
         if (size.width <= 1600) {
           srcset += size.source + " " + size.width + "w, " 
         }
       });
-      flickrIdImage.classList.remove('loader');
-      flickrIdImage.srcset = srcset;
+
+      const container = document.createElement('div');
+      container.innerHTML = el;
+      const anchor = container.querySelector('a');
+      anchor.setAttribute('target', '_blank');
+      anchor.setAttribute('rel', 'noopener noreferrer');
+      const img = container.querySelector('img');
+      img.setAttribute('srcset', srcset);
+      img.setAttribute('src', sizesInRange[0].source);
+      img.style.height = flickrImagePlaceholder.style.height;
+      flickrImagePlaceholder.outerHTML = container.innerHTML;
     });
   });
 </script>

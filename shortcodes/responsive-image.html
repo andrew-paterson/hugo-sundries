@@ -9,6 +9,10 @@
   {{ $max_width_num := strings.TrimSuffix "%" (.Get "max_width") }}
   {{- $class = (print $class " max-width-" $max_width_num) }}
 {{- end -}}
+{{- if (.Get "desktop_max_width") -}}
+  {{ $desktop_max_width_num := strings.TrimSuffix "%" (.Get "desktop_max_width") }}
+  {{- $class = (print $class " desktop-max-width-" $desktop_max_width_num) }}
+{{- end -}}
 {{- if (.Get "align") -}}
   {{- $class = (print $class " responsive-image-align-" (.Get "align")) }}
 {{- end -}}
