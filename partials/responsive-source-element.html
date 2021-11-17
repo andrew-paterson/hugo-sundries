@@ -3,4 +3,4 @@
 {{ if $image_path }}
   {{ $srcset = partial "hugo-sundries/srcset-from-clones.html" (dict "context" .context "image_path" $image_path) }}
 {{ end }}
-{{ partial "hugo-sundries/responsive-source-element-generic.html" (dict "image_path" $image_path "srcset" $srcset)}}
+{{ partial "hugo-sundries/responsive-source-element-generic.html" (dict "image_path" $image_path "srcset" $srcset "media" .media "sizes" .sizes "type" .type)}}
