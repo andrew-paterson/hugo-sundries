@@ -178,7 +178,7 @@ Each element with an infinite loading image may optionally have:
     <script>
       var infinityImageLoaderDefaults = {
         scrollElementSelector: '#wrapper',
-        loadingElement: `<div class="test" data-infinity-image-loader-load-more>Test</div>`,
+        customLoadingElement: `<div class="test" data-infinity-image-loader-load-more>Test</div>`,
         batchSize: 3
       }
     </script>
