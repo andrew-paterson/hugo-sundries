@@ -119,8 +119,6 @@ function thumbnailRequestComplete(infinityLoaderItem, currentBatch, infinityLoad
   if (status) {
     infinityLoaderItem.classList.add(status);
   }
-  setImageParentHeight(infinityLoaderItem);
-
   var loadingImages = Array.from(currentBatch).filter(item => {
     return !item.classList.contains('complete')
   });
@@ -144,7 +142,10 @@ function loadImageBatch(infinityLoaderElement) {
   currentBatch.forEach((infinityLoaderItem) => {
     infinityLoaderItem.classList.add('loading');
     infinityLoaderItem.style.display = null;
+    setImageParentHeight(infinityLoaderItem);
+
     infinityLoaderItem.querySelector('[data-lazy-image-parent]').insertAdjacentHTML('beforeend', generateImageMarkup(infinityLoaderItem));
+  
     var thumbnailImage = infinityLoaderItem.querySelector('img');
     thumbnailImage.onload = () => {
       thumbnailRequestComplete(infinityLoaderItem, currentBatch, infinityLoaderElement, 'success');
@@ -216,7 +217,7 @@ function setImageParentHeight(infinityLoaderItem) {
     if (imageParent.getAttribute('data-width-height-ratio')) {
       var dimensions = imageParent.getAttribute('data-width-height-ratio').split(":");
       thumbnailHeightWidthRatio = dimensions[1]/dimensions[0];
-      var height = infinityLoaderItem.clientWidth*thumbnailHeightWidthRatio;
+      var height = imageParent.clientWidth*thumbnailHeightWidthRatio;
       imageParent.style.height = `${height}px`;
     }
   }
