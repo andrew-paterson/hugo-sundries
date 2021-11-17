@@ -115,7 +115,6 @@ function generateImageMarkup(infinityLoaderItem) {
 
 function thumbnailRequestComplete(infinityLoaderItem, currentBatch, infinityLoaderElement, status) {
   infinityLoaderItem.classList.remove('loading');
-  infinityLoaderItem.style.display = null;
   infinityLoaderItem.classList.add('complete');
   if (status) {
     infinityLoaderItem.classList.add(status);
@@ -144,6 +143,7 @@ function loadImageBatch(infinityLoaderElement) {
   var currentBatch = Array.from(infinityLoaderElement.querySelectorAll('[data-lazy-image-src]:not(.loading):not(.complete)')).slice(0, batchSize); 
   currentBatch.forEach((infinityLoaderItem) => {
     infinityLoaderItem.classList.add('loading');
+    infinityLoaderItem.style.display = null;
     infinityLoaderItem.querySelector('[data-lazy-image-parent]').insertAdjacentHTML('beforeend', generateImageMarkup(infinityLoaderItem));
     var thumbnailImage = infinityLoaderItem.querySelector('img');
     thumbnailImage.onload = () => {
