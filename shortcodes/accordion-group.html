@@ -1,0 +1,9 @@
+
+
+{{ $show_multiple_prop := "" }}
+{{ if ( .Get "show_multiple" ) }}
+  {{ $show_multiple_prop = "data-ac-show-multiple"}}
+{{ end }}
+<div class="accordion-container" {{ $show_multiple_prop | safeHTMLAttr }}>
+  {{ .Inner }}
+</div>

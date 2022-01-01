@@ -1,0 +1,11 @@
+{{ $items_by_section := (where .context.Site.RegularPages.ByTitle "Section" .section_name )}}
+{{ $items_by_cat := where $items_by_section ".Params.category" .category }}
+{{ if .max }}
+  {{ range first .max $items_by_cat.ByPublishDate.Reverse  }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
+{{ else }}
+  {{ range $items_by_cat.ByPublishDate.Reverse  }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{ end }}
+{{ end }}

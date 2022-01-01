@@ -1,9 +1,18 @@
-{{ if .max }}
-{{ range first .max (where .context.Site.RegularPages.ByTitle "Section" .section_name ).ByPublishDate.Reverse  }}
-    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-  {{ end }}
-{{ else }}
-  {{ range (where .context.Site.RegularPages.ByTitle "Section" .section_name ).ByPublishDate.Reverse  }}
-    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-  {{ end }}
+{{ $page_url := .context.RelPermalink }}
+{{ $pages := (where .context.Site.RegularPages "Section" .section_name )}}
+{{ if .sort_by }}
+  {{ $pages = $pages.ByParam .sort_by}}
 {{ end }}
+{{ if .reverse_order }}
+  {{ $pages = $pages.Reverse}}
+{{ end }}
+
+<ul class="section-menU {{ .class }}">
+  {{ range first (or .max 999999) $pages }}
+    {{ if (eq $page_url .RelPermalink )}}
+      <li class="active">{{ .Title }}</li>
+    {{ else }}
+      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+  {{ end}}
+</ul>
