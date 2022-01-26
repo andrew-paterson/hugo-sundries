@@ -250,7 +250,7 @@ Each post is hidden until its image is added to the DOM and begins loading.
 
 
 {{% accordion-group show_multiple=true %}}
-{{% accordion-item-block title="AAPS case study research and teaching toolkit" open=true header_level="3" %}}
+{{% accordion-item-block title="AAPS case study research and teaching toolkit" open=true header_tag="h3" %}}
 ...
 {{% /accordion-group %}}
 {{% /accordion-item-block %}}

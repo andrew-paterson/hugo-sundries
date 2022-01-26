@@ -23,27 +23,7 @@
 {{- if $caption -}}<figure class="{{ $class }}">{{- end -}}
 {{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
 <img srcset="{{ partial "hugo-sundries/srcset-from-clones.html" (dict "context" . "image_path" $image_path)}}"
-  src="{{ $image_path }}"
-  {{ if $sizes }}
-    sizes="{{ $sizes }}"
-  {{ end }}
-  {{ if (.Get "alt") }}
-    alt="{{ (.Get "alt") }}"
-  {{ end }}
-  {{ if (.Get "title") }}
-    title="{{ (.Get "title") }}"
-  {{ end }}
-  {{ if (.Get "data_dimensions") }}
-    data-dimensions="{{ (.Get "data_dimensions") }}"
-  {{ end }}
-  {{ if (.Get "data_object_fit") }}
-    data-object-fit="{{ (.Get "data_object_fit") }}"
-  {{ end }}
-  {{ if (and $class (not $caption) )}}
-    class="{{ $class }}"
-  {{ end }}
-  {{ (.Get "img_attrs") | safeHTMLAttr }}
-/>
+src="{{ $image_path }}" {{ if $sizes }}sizes="{{ $sizes }}"{{ end }} {{ if (.Get "alt") }}alt="{{ (.Get "alt") }}"{{ end }} {{ if (.Get "title") }}title="{{ (.Get "title") }}"{{ end }} {{ if (.Get "data_dimensions") }}data-dimensions="{{ (.Get "data_dimensions") }}"{{ end }} {{ if (.Get "data_object_fit") }}data-object-fit="{{ (.Get "data_object_fit") }}"{{ end }} {{ if (and $class (not $caption) )}}class="{{ $class }}"{{ end }} {{ (.Get "img_attrs") | safeHTMLAttr }} />
 {{- if $image_link -}}</a>{{- end -}}
 {{- if $caption -}}
 <figcaption>{{ $caption }}</figcaption>

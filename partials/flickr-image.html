@@ -1,7 +1,7 @@
 {{ $bb_code := .bb_code }}
 {{ $html := .html }}
 {{ $caption := "" }}
-{{ $image_src := "" }}
+{{ $image_src := (or .image_src "") }}
 {{ $flickr_url := "" }}
 {{ $flickr_caption := "" }}
 {{ $flickr_user_url := "" }}
@@ -14,7 +14,7 @@
   {{ $flickr_caption = $bb_code | replaceRE $re "$3"  }}
   {{ $flickr_user_url = $bb_code | replaceRE $re "$4"  }}
   {{ $flickr_user_name = $bb_code | replaceRE $re "$5"  }}
-{{ else }}
+{{ else if $html }}
   {{ $re := `.*<a.*href="(.*?)".*title="(.*?)".*<img src="(.*?)".*alt="(.*?)".*` }}
   {{ $image_src = $html | replaceRE $re "$3"  }}
   {{ $flickr_url = $html | replaceRE $re "$1"  }}
@@ -40,7 +40,7 @@
   <div class="loader"></div></div>
 {{ end }}
 <script>
-  const flickrImagePlaceholders = Array.from(document.querySelectorAll('[data-flickr-image-placeholder]'));
+  var flickrImagePlaceholders = Array.from(document.querySelectorAll('[data-flickr-image-placeholder]'));
   flickrImagePlaceholders.forEach(flickrImagePlaceholder => {
     let el = {{ $markup }};
     const photoId = flickrImagePlaceholder.getAttribute('data-flickr-image-id');

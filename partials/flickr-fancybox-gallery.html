@@ -1,9 +1,12 @@
 {{ $flickr_api_key := (or .flickr_api_key .context.Site.Params.flickr_api_key) }}
-{{ $flickr_user_id := (or .flickr_user_id .context.Site.Params.flickr_user_id) }}
+{{ $photoset_url := (strings.TrimSuffix "/" .photoset_url) }}
+{{ $photoset_url_parts := (split $photoset_url "/") }}
+{{ $flickr_user_id := (or .flickr_user_id  ( index $photoset_url_parts 4 ) .context.Site.Params.flickr_user_id) }}
 {{ $photoset_id := .photoset_id }}
 {{ if .photoset_url }}
   {{ $photoset_id = (path.Base .photoset_url)}}
 {{ end }}
+
 <div class="flickr-gallery image-gallery" data-thumbnail-dimensions="4:3" data-infinity-image-loader>
   <div class="initial-loader loader"></div>
 </div>

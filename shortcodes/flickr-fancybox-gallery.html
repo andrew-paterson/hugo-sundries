@@ -1,0 +1,4 @@
+{{ $photoset_url := (.Get "photoset_url") }}
+{{ $flickr_captions := (.Get "flickr_captions") }}
+
+{{ partial "hugo-sundries/flickr-fancybox-gallery.html" (dict "context" . "photoset_url" $photoset_url "flickr_captions" true)}}

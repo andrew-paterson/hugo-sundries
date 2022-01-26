@@ -6,13 +6,23 @@
 {{ if .reverse_order }}
   {{ $pages = $pages.Reverse}}
 {{ end }}
-
-<ul class="section-menU {{ .class }}">
+{{ $cover_image:= .cover_image }}
+{{ $publishdate:= .publishdate }}
+{{ $list_item_class:= .list_item_class }}
+<ul class="section-menu {{ .class }}">
   {{ range first (or .max 999999) $pages }}
     {{ if (eq $page_url .RelPermalink )}}
       <li class="active">{{ .Title }}</li>
     {{ else }}
-      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+      <li class="{{ $list_item_class }}">
+        {{ if (and $cover_image .Params.cover_image) }}
+          {{ partial "hugo-sundries/responsive-image.html" (dict "context" . "image_path" .Params.cover_image "sizes" "60px")}}
+        {{ end }}
+        <div>
+          <div><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+          <span class="publish-date">{{dateFormat "2 Jan 2006" .PublishDate }}</span>
+        </div>
+      </li>
     {{ end }}
   {{ end}}
 </ul>

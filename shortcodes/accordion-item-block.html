@@ -5,7 +5,7 @@
 {{ end }}
 {{ $opening_header_tag := (print "<" (or (.Get "header_tag") "h2") ">") }}
 {{ $closing_header_tag := (print "</" (or (.Get "header_tag") "h2") ">") }}
-<div class="ac test" data-title-parsed="{{ $parsed_title }}" {{ $open_data_prop | safeHTMLAttr }}>
+<div class="ac" data-title-parsed="{{ $parsed_title }}" {{ $open_data_prop | safeHTMLAttr }}>
   <div class="ac-header">
     <div class="ac-trigger" role="button">{{ $opening_header_tag | safeHTML }}{{ .Get "title" }}{{ $closing_header_tag | safeHTML }}</div>
   </div>

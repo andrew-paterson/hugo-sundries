@@ -15,7 +15,8 @@ $ac-panel-padding: 15px 30px !default;
 $ac-border-color: #ccc !default;
 $ac-panel-background-color: #fff !default;
 $ac-trigger-background-color: #eee !default;
-$ac-item-border-radius: 3px;
+$ac-item-border-radius: 3px !default;
+// OPTIONAL - $ac-trigger-color
 
 .ac {
   margin-top: 10px;
@@ -31,6 +32,9 @@ $ac-item-border-radius: 3px;
   padding: 0;
   & * {
     margin: 0;
+    @if variable-exists(ac-trigger-color) {
+      color: $ac-trigger-color;
+    }
   }
 }
 
