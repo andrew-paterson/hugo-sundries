@@ -1,0 +1,5 @@
+<ul class="taxonomy-terms-in-section-menu {{ .class }}">
+  {{ range  where (index .context.Site.Taxonomies .taxonomy) ".Page.Section" .section }}
+    <li><a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a> {{ .Count }}</li>
+  {{ end }}
+</ul>

@@ -12,7 +12,15 @@
 <ul class="section-menu {{ .class }}">
   {{ range first (or .max 999999) $pages }}
     {{ if (eq $page_url .RelPermalink )}}
-      <li class="active">{{ .Title }}</li>
+      <li class="active">
+        {{ if (and $cover_image .Params.cover_image) }}
+          {{ partial "hugo-sundries/responsive-image.html" (dict "context" . "image_path" .Params.cover_image "sizes" "60px")}}
+        {{ end }}
+        <div>
+          <div>{{ .Title }}</div>
+          {{ if .PublishDate }}<span class="publish-date">{{dateFormat "2 Jan 2006" .PublishDate }}</span>{{ end }}
+        </div>
+      </li>
     {{ else }}
       <li class="{{ $list_item_class }}">
         {{ if (and $cover_image .Params.cover_image) }}
@@ -20,7 +28,7 @@
         {{ end }}
         <div>
           <div><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
-          <span class="publish-date">{{dateFormat "2 Jan 2006" .PublishDate }}</span>
+          {{ if .PublishDate }}<span class="publish-date">{{dateFormat "2 Jan 2006" .PublishDate }}</span>{{ end }}
         </div>
       </li>
     {{ end }}
