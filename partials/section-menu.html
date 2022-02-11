@@ -1,5 +1,12 @@
 {{ $page_url := .context.RelPermalink }}
 {{ $pages := (where .context.Site.RegularPages "Section" .section_name )}}
+{{ if .include_taxonomy }}
+  {{ $pages = where $pages (print ".Params." .include_taxonomy) "intersect" .include_taxonomy_terms }}
+{{ end }}
+{{ if .exclude_taxonomy }}
+  {{ $excluded := where $pages (print ".Params." .exclude_taxonomy) "intersect" .exclude_taxonomy_terms }}
+  {{ $pages = $pages | complement $excluded }}
+{{ end }}
 {{ if .sort_by }}
   {{ $pages = $pages.ByParam .sort_by}}
 {{ end }}
