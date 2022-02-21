@@ -1,5 +1,5 @@
 {{- $image_path := . -}}
-{{- $split_image_path := (split (path.Base $image_path) "-") -}}
-{{- $reversed_split_image_path := ( partial "hugo-sundries/reverse-array.html" $split_image_path) -}}
-{{- $image_basename_no_size :=  partial "hugo-sundries/reverse-array.html" (after 1 $reversed_split_image_path) -}}
-{{- return trim (path.Join (path.Dir $image_path) (print (delimit $image_basename_no_size "-") (path.Ext $image_path))) " " -}}
+{{ $re := `(.*)(-\d{1,4}w)(\.[A-z]{1,5})` }}
+{{ $image_no_ext := $image_path | replaceRE $re "$1"  }}
+{{ $ext := $image_path | replaceRE $re "$3"  }}
+{{ return (print $image_no_ext $ext "test")}}

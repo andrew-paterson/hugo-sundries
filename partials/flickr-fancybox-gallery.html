@@ -1,13 +1,13 @@
 {{ $flickr_api_key := (or .flickr_api_key .context.Site.Params.flickr_api_key) }}
 {{ $photoset_url := (strings.TrimSuffix "/" .photoset_url) }}
+{{ $photoset_url := (strings.TrimSuffix "/show" $photoset_url) }}
 {{ $photoset_url_parts := (split $photoset_url "/") }}
 {{ $flickr_user_id := (or .flickr_user_id  ( index $photoset_url_parts 4 ) .context.Site.Params.flickr_user_id) }}
 {{ $photoset_id := .photoset_id }}
 {{ if .photoset_url }}
-  {{ $photoset_id = (path.Base .photoset_url)}}
+  {{ $photoset_id = (path.Base $photoset_url)}}
 {{ end }}
-
-<div class="flickr-gallery image-gallery" data-thumbnail-dimensions="4:3" data-infinity-image-loader>
+<div class="flickr-gallery image-gallery" data-thumbnail-dimensions="4:3" data-infinity-image-loader data-gallery-id-{{$photoset_id}}>
   <div class="initial-loader loader"></div>
 </div>
 
@@ -22,7 +22,7 @@
   }
   var albumUrl = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key={{ $flickr_api_key }}&photoset_id={{ $photoset_id }}&user_id={{ $flickr_user_id }}&format=json&nojsoncallback=1";
 
-  const flickrSizes = [{
+  var flickrSizes = [{
       label: "Square",
       suffix: "_s",
       max: 75
@@ -73,11 +73,17 @@
       max: 1024
     }
   ];
-  const initialLoader = document.querySelector('.initial-loader');
+  var initialLoader = document.querySelector('.initial-loader');
 
 
   fetchJSONPromise(albumUrl).then(data => {
     initialLoader.remove();
+    console.log('-------------------------')
+    console.log(data);
+    console.log(albumUrl);
+    if (data.stat === 'fail') {
+      return;
+    }
     data.photoset.photo.forEach(photo => {
       const imageUrlBase = "https://live.staticflickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret;
       const src = imageUrlBase + ".jpg";
@@ -101,12 +107,13 @@
       innerDiv.setAttribute('data-lazy-image-parent', true);
       innerDiv.setAttribute('data-width-height-ratio', "4:3");
       item.append(innerDiv);
-      const gallery = document.querySelector('.flickr-gallery');
+      const gallery = document.querySelector('[data-gallery-id-{{$photoset_id}}]');
       gallery.append(item);
     });
     flickrGalleryLoaded();
   });
 </script>
+
 {{ partial "hugo-sundries/script-bundle.html" (dict "context" . "output_path" "js/gallery.js" "source_files" (slice "js/hugo-sundries/addons/fancybox-4.js" "js/hugo-sundries/image-infinity-loader.js|babel")) }}
 <script>
   Fancybox.bind('[data-fancybox="gallery"]', {

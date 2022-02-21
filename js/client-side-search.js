@@ -115,7 +115,6 @@ function createResultsView(sortedMatches, queryString) {
   queryString = queryString || '';
   let summary = '';
   if (queryString.length >= 3) {
-    console.log(searchIndex)
     if (searchIndex) {
       summary = `${sortedMatches.length} ${customInflector(sortedMatches.length, {singular:'page'})} found with matches for "${highlightMatches(queryString, queryString)}".`;
     } else {
