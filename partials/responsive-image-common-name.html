@@ -1,5 +1,0 @@
-{{- $image_path := . -}}
-{{ $re := `(.*)(-\d{1,4}w)(\.[A-z]{1,5})` }}
-{{ $image_no_ext := $image_path | replaceRE $re "$1"  }}
-{{ $ext := $image_path | replaceRE $re "$3"  }}
-{{ return (print $image_no_ext $ext "test")}}

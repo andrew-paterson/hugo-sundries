@@ -18,7 +18,7 @@
   <div class="image-gallery" data-thumbnail-dimensions="{{ $thumbnail_aspect_ratio }}" data-infinity-image-loader>
       {{- range $filepaths -}}
         {{- $src := . -}}
-        {{- $srcset := ( partial "hugo-sundries/srcset-from-clones.html" (dict "context" $page_context "image_path" $src)) -}}
+        {{- $srcset := ( partial "hugo-sundries/srcset-from-manifest.html" (dict "context" $page_context "image_path" $src)) -}}
         <a class="gallery-thumbnail" 
           data-fancybox="gallery"
           {{ printf "href=%q" $src | safeHTMLAttr }} 

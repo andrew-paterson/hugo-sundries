@@ -2,6 +2,6 @@
 {{- $caption := .caption -}}
 {{- $image_link := .image_link -}}
 {{- $image_link_class := .image_link_class -}}
-{{- $srcset := partial "hugo-sundries/srcset-from-clones.html" (dict "context" .context "image_path" $image_path) -}}
+{{- $srcset := partial "hugo-sundries/srcset-from-manifest.html" (dict "context" .context "image_path" $image_path) -}}
 
 {{ partial "hugo-sundries/responsive-image-generic.html" (dict "image_path" $image_path "srcset" $srcset "image_link" $image_link "image_link_class" $image_link_class "caption" $caption "class" .class "sizes" .sizes "alt" .alt "title" .title "img_attrs" .img_attrs "data_dimensions" .data_dimensions "data_object_fit" .data_object_fit)}}

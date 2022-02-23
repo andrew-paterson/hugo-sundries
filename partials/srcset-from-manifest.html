@@ -1,0 +1,11 @@
+{{ $manifest := .context.Site.Data.responsive_image_manifest }}
+{{ $size_versions := slice }}
+{{ range where $manifest "original" (path.Join "/static/" .image_path) }}
+  {{ $clones := index . "clones" }}
+  {{ range $clones }}
+  {{ $clonePath := strings.TrimPrefix "/static" (index . "clonePath")}}
+  {{- $size_versions = $size_versions | append (print $clonePath " " (index . "cloneSize")) }}
+  {{ end }}
+{{ end }}
+{{ $final := delimit $size_versions ", "}}
+{{ return $final }}

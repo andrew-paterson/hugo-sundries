@@ -4,7 +4,7 @@
 {{ $final := ""}}
 {{ if (not $big_suffix) }}
   {{- $image_extension := path.Ext . -}}
-  {{ $image_path_no_suffix := . | replaceRE `(.*)_.*` "$1"  }}
+  {{ $image_path_no_suffix := . | replaceRE `(.*)_[a-zA-Z]` "$1"  }}
   {{- $items := slice -}}
   {{- range $flickr_sizes -}}
     {{- $items = $items | append (print $image_path_no_suffix .suffix $image_extension " " (math.Round (mul 0.75 .max)) "w") -}}

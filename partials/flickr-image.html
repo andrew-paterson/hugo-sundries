@@ -59,11 +59,11 @@
       "method": "GET",
       "headers": {}
     }).then(data => {
+      console.log(data)
       let srcset = '';
       const sizesInRange = data.sizes.size.filter(size => size.width <= 1600).sort((a, b) => {
         return b.width - a.width;
       });
-      console.log(sizesInRange);
       sizesInRange.forEach(size => {
         if (size.width <= 1600) {
           srcset += size.source + " " + size.width + "w, " 
@@ -72,9 +72,12 @@
 
       const container = document.createElement('div');
       container.innerHTML = el;
+      console.log(el);
       const anchor = container.querySelector('a');
-      anchor.setAttribute('target', '_blank');
-      anchor.setAttribute('rel', 'noopener noreferrer');
+      if (anchor) {
+        anchor.setAttribute('target', '_blank');
+        anchor.setAttribute('rel', 'noopener noreferrer');
+      }
       const img = container.querySelector('img');
       img.setAttribute('srcset', srcset);
       img.setAttribute('src', sizesInRange[0].source);
