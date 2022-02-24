@@ -3,8 +3,10 @@
 {{ range where $manifest "original" (path.Join "/static/" .image_path) }}
   {{ $clones := index . "clones" }}
   {{ range $clones }}
-  {{ $clonePath := strings.TrimPrefix "/static" (index . "clonePath")}}
-  {{- $size_versions = $size_versions | append (print $clonePath " " (index . "cloneSize")) }}
+    {{ $clonePath := strings.TrimPrefix "/static" (index . "clonePath")}}
+    {{- if fileExists (index . "clonePath") -}}
+      {{- $size_versions = $size_versions | append (print $clonePath " " (index . "cloneSize")) }}
+    {{ end }}
   {{ end }}
 {{ end }}
 {{ $final := delimit $size_versions ", "}}
