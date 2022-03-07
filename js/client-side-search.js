@@ -1,7 +1,22 @@
 function highlightMatches(needle, haystack) {
   var queryMatch = new RegExp(needle, 'gi');
+  const span = document.createElement('span');
+  span.classList.add('highlighted');
   return haystack.replace(queryMatch, function(iMatch) {
+    span.textContent = iMatch;
     return '<span class="highlighted">' + iMatch + '</span>';
+    // return span;
+  });
+}
+
+function highlightMatchesEl(needle, haystack) {
+  var queryMatch = new RegExp(needle, 'gi');
+  const span = document.createElement('span');
+  span.classList.add('highlighted');
+  return haystack.replace(queryMatch, function(iMatch) {
+    span.textContent = iMatch;
+    // return '<span class="highlighted">' + iMatch + '</span>';
+    return span;
   });
 }
 
@@ -126,22 +141,66 @@ function createResultsView(sortedMatches, queryString) {
 
   const searchResultSummaryEl = document.querySelector('.search-results-summary');
   searchResultSummaryEl.innerHTML = summary;
-  var resultsHTML = `<div>`;
+  const searchResultsEl = document.createElement('div');
+
   sortedMatches.forEach(matchData => {
-    const link = '<a href="' + matchData.href + '">'
-    var thisMatchHTML = '<div class="search-result">';
+    const linkEl = document.createElement('a');
+    linkEl.setAttribute('href', matchData.href);
+    linkEl.innerHTML = highlightMatches(queryString, matchData.title);
+    const searchResultEl = document.createElement('div');
+    searchResultEl.classList.add('search-result');
+    
     if (matchData.title) {
-      thisMatchHTML += '<h3 class="search-result-title">' + link + highlightMatches(queryString, matchData.title) + '</a></h3>';
+      const titleEl = document.createElement('h3');
+      titleEl.classList.add('search-result-title');
+      titleEl.appendChild(linkEl);
+      searchResultEl.appendChild(titleEl);
     }
-    thisMatchHTML += '<div class="search-result-body"><div class="search-result-href">' + link + matchData.href + '</a></div>';
-    (matchData.exerpts || []).forEach(exerpt => {
-      thisMatchHTML += '<div class="search-result-snippet">' + highlightMatches(queryString, exerpt).trim() + '...</div>';
+    const searchResultBodyEl = document.createElement('div');
+    searchResultBodyEl.classList.add('search-result-body');
+    const searchResultHrefEl = document.createElement('div');
+    searchResultHrefEl.classList.add('search-result-href');
+    const hrefAnchorEl = document.createElement('a');
+    hrefAnchorEl.setAttribute('href', matchData.href);
+    hrefAnchorEl.textContent = matchData.href;
+    searchResultHrefEl.appendChild(hrefAnchorEl);
+    searchResultBodyEl.appendChild(searchResultHrefEl);
+    const searchSnippetsIntroEl = document.createElement('div');
+    searchSnippetsIntroEl.classList.add('search-snippets-intro');
+    const searchSnippetsFullEl = document.createElement('div');
+    searchSnippetsFullEl.classList.add('search-snippets-full');
+    searchSnippetsFullEl.style.display = 'none';
+    const searchSnippetsHeader = document.createElement('h3');
+    searchSnippetsHeader.textContent = 'Excerpts';
+    // searchSnippetsIntroEl.appendChild(searchSnippetsHeader);
+
+    (matchData.exerpts || []).forEach((exerpt, index) => {
+      const snippetEl = document.createElement('div');
+      snippetEl.classList.add('search-result-snippet');
+      snippetEl.innerHTML = `...${highlightMatches(queryString, exerpt).trim()}...`;
+      if (index < 3) {
+        searchSnippetsIntroEl.appendChild(snippetEl);
+      } else {
+        searchSnippetsFullEl.appendChild(snippetEl);
+      }
     });
-    thisMatchHTML += '</div></div>';
-    resultsHTML += thisMatchHTML;
+    searchResultBodyEl.appendChild(searchSnippetsIntroEl);
+    if (matchData.exerpts.length > 3) {
+      const switcherEl = document.createElement('a');
+      switcherEl.setAttribute('role', 'button');
+      switcherEl.textContent = `+ Show ${matchData.exerpts.length - 3} more matches`;
+      searchResultBodyEl.appendChild(switcherEl);
+      searchResultBodyEl.appendChild(searchSnippetsFullEl);
+      switcherEl.addEventListener('click', (e) => {
+        console.log(e.target);
+        const fullSnippets = e.target.nextSibling;
+        fullSnippets.style.display === 'none' ? fullSnippets.style.display = null : fullSnippets.style.display = 'none';
+      })
+    }
+    searchResultEl.appendChild(searchResultBodyEl);
+    searchResultsEl.appendChild(searchResultEl);
   });
-  resultsHTML += '</div>';
-  document.querySelector('[data-search-results]').innerHTML = resultsHTML;
+  document.querySelector('[data-search-results]').appendChild(searchResultsEl);
   document.querySelector('[data-search-results]').classList.remove('loading');
 }
 
