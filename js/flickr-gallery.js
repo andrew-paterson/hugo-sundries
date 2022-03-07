@@ -58,19 +58,11 @@ function fetchJSONPromise(url, opts = {}) {
       .catch(err => reject(err));
   })
 }
-// var albumUrl = "https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key={{ $flickr_api_key }}&photoset_id={{ $photoset_id }}&user_id={{ $flickr_user_id }}&format=json&nojsoncallback=1";
 
-
-// var initialLoader = document.querySelector('.initial-loader');
 function fetchFlickrGallery(galleryElem) {
   return new Promise((resolve, reject) => {
-    // const galleryElem = document.querySelector('[data-flickr-gallery]');
     const albumUrl = galleryElem.getAttribute('data-album-url');
     fetchJSONPromise(albumUrl).then(data => {
-      // initialLoader.remove();
-      // console.log('-------------------------')
-      // console.log(data);
-      // console.log(albumUrl);
       if (data.stat === 'fail') {
         return;
       }
@@ -99,7 +91,6 @@ function fetchFlickrGallery(galleryElem) {
         item.append(innerDiv);
         galleryElem.append(item);
       });
-      // flickrGalleryLoaded();
       resolve();
     });
   }).catch(err => {
@@ -112,10 +103,10 @@ Fancybox.bind('[data-fancybox="gallery"]', {
   Thumbs: false,
   closeButton: "top"
 });
+
 function flickrGalleriesLoaded() {
   let done;
   if (done)  { return;}
-  console.log('init')
   initLazyLoad({
     scrollElementSelector: '#wrapper',
     batchSize: 12,

@@ -4,7 +4,7 @@
 // Different batch sizes for different media queries
 
 var currentlyLoadingImages = false;
-var infinityLoaderElements = document.querySelectorAll('[data-infinity-image-loader]');
+var infinityLoaderElements;
 let scrollSelectorObjects;
 let scrollSelectorMediaQueryLists = [];
 let customScrollSelector;
@@ -12,6 +12,9 @@ let infinityImageLoaderDefaults;
 var loadingMoreImagesElement;
 
 function initLazyLoad(opts = {}) {
+  const selector = opts.containerElementSelector || '[data-infinity-image-loader]';
+  if (Array.from(document.querySelectorAll(selector)).length === 0) { return; }
+  infinityLoaderElements = Array.from(document.querySelectorAll(selector));
   infinityImageLoaderDefaults = opts;
   loadingMoreImagesElement = infinityImageLoaderDefaults.customLoadingElement || `<div class="load-more-images ${infinityImageLoaderDefaults.loadingElementClass || ''}" data-infinity-image-loader-load-more><div class="loader"></div></div>`;
   
@@ -143,7 +146,6 @@ function loadImageBatch(infinityLoaderElement) {
     infinityLoaderItem.classList.add('loading');
     infinityLoaderItem.style.display = null;
     setImageParentHeight(infinityLoaderItem);
-
     infinityLoaderItem.querySelector('[data-lazy-image-parent]').insertAdjacentHTML('beforeend', generateImageMarkup(infinityLoaderItem));
   
     var thumbnailImage = infinityLoaderItem.querySelector('img');
