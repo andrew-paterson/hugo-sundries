@@ -1,0 +1,4 @@
+{{ $snippets := .Site.GetPage "/faqs/content-snippets" }}
+{{ range where $snippets.Resources "Params.snippet_name" ( .Get "snippet_name" )}}
+{{ .Content }}
+{{ end }}
