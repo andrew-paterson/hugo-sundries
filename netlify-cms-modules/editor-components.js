@@ -152,7 +152,6 @@ function registerComponents(CMS, breakdowns) {
     }
     return component;
   });
-  console.log(filteredComponents);
   filteredComponents.forEach(component => {
     CMS.registerEditorComponent(component);
   });
