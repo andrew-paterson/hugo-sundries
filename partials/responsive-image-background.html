@@ -1,0 +1,23 @@
+
+<div class="position-relative responsive-image-background width-100">
+  <div class="position-absolute background">
+{{ if .images }}
+<picture>
+  {{ range .images }}
+    {{ partial "hugo-sundries/responsive-source-element.html" (dict "context" . "image_path" .path "media" .media "element" "source")}}
+    {{ partial "hugo-sundries/responsive-source-element.html" (dict "context" . "image_path" .path "media" .media "element" "source")}}
+  {{ end }}
+  {{ with (index .images 0 )}}
+  <img src="{{ .path }}">
+  {{ end}}
+</picture>
+{{ else }}
+  {{ with .image }}
+    {{ partial "hugo-sundries/responsive-image.html" (dict "context" . "image_path" .path "sizes" .sizes)}}
+  {{ end }}
+{{ end }}
+</div>
+<div class="position-relative content">
+  {{ partial .content .context }}
+</div>
+</div>

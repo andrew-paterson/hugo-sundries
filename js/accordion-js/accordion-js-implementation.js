@@ -20,7 +20,7 @@ if (hash) {
     if (urlHashAccordionPanel) {
       const urlHashAccordionPanelAncestors = ancestorsWithClass(urlHashAccordionPanel, 'ac');
       urlHashAccordionPanelAncestors.forEach(ac => {
-        ac.setAttribute('data-ac-panel-initially-open', '')
+        ac.setAttribute('data-ac-panel-initially-open', '');  
       });
       if (!showMultiple) {
         const defaultOpen = accordionEl.querySelector('[data-ac-panel-default-open]');
@@ -33,10 +33,15 @@ if (hash) {
 }
 const scrollElementSelector = '#wrapper';
 
-const accordionObjects = accordionEls.map(accordionEl => {
-  const options = {
-    onOpen: (currElement) => {
-      const parsedTitle = currElement.getAttribute('data-title-parsed');
+const autoScrollEl = document.querySelector('[data-auto-scroll] [data-ac-panel-initially-open]');
+if (autoScrollEl) {
+  setTimeout(() => { // setTimeout causes the scroll to happen after the accordion hs finished opening.
+    scrollElementToTop(autoScrollEl);
+  });
+}
+
+function scrollElementToTop(currElement) {
+  const parsedTitle = currElement.getAttribute('data-title-parsed');
       window.location.hash = parsedTitle;
       if (scrollElementSelector) {
         const scrollElement = document.querySelector(scrollElementSelector);
@@ -46,6 +51,13 @@ const accordionObjects = accordionEls.map(accordionEl => {
       } else {
         currElement.scrollIntoView({behavior: 'smooth'});
       }
+}
+
+const accordionObjects = accordionEls.map(accordionEl => {
+  const options = {
+    onOpen: (currElement) => {
+      console.log('test')
+      scrollElementToTop(currElement);
     }
   }
   const accordionPanelElements = Array.from(accordionEl.querySelectorAll(':scope > .ac'));
