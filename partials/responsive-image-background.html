@@ -1,11 +1,11 @@
 
 <div class="position-relative responsive-image-background width-100">
   <div class="position-absolute background">
+{{ $context := .context }}
 {{ if .images }}
 <picture>
   {{ range .images }}
-    {{ partial "hugo-sundries/responsive-source-element.html" (dict "context" . "image_path" .path "media" .media "element" "source")}}
-    {{ partial "hugo-sundries/responsive-source-element.html" (dict "context" . "image_path" .path "media" .media "element" "source")}}
+    {{ partial "hugo-sundries/responsive-source-element.html" (dict "context" $context "image_path" .path "media" .media "element" "source")}}
   {{ end }}
   {{ with (index .images 0 )}}
   <img src="{{ .path }}">
