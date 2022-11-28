@@ -1,5 +1,4 @@
 const autoAccordionEls = Array.from(document.querySelectorAll('.auto-accordion'));
-console.log(autoAccordionEls);
 autoAccordionEls.forEach(acc => {
   const newAccGroup = document.createElement('div');
   newAccGroup.classList.add('accordion-container');
