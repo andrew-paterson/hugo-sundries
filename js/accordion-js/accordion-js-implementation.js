@@ -47,6 +47,8 @@ function scrollElementToTop(currElement) {
         const scrollElement = document.querySelector(scrollElementSelector);
         const scrollElementRect = scrollElement.getBoundingClientRect();
         const scrollElementPaddingTop = parseFloat(window.getComputedStyle(scrollElement, null).getPropertyValue('padding-top'));
+        console.log(scrollElementSelector)
+        console.log(scrollElementPaddingTop);
         scrollElement.scrollTop = currElement.offsetTop - scrollElementRect.top - scrollElementPaddingTop - 12;
       } else {
         currElement.scrollIntoView({behavior: 'smooth'});
