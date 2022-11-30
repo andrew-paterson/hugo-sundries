@@ -129,6 +129,19 @@ const components = [{
     }
     return (markup);
   }
+}, {
+  id: "read-more",
+  className: 'test',
+  label: "Read more",
+  pattern: '<!--more-->',
+
+  toBlock: function(obj) {
+    return `<\!--more-->`
+  },
+  toPreview: function(obj) {
+    const markup = `<a>Read more</a>`;
+    return (markup);
+  }
 }];
 function registerComponents(CMS, breakdowns) {
   const filteredComponents = components.filter(component => {
