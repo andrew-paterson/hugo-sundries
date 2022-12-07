@@ -1,11 +1,11 @@
-{{ $wrapper_classes := (or .wrapper_classes "page-gutters position-fixed bottom-0 bg-white box-shadow-top width-100 d-flex justify-flex-end flex-wrap align-center")}}
-{{ $wrapper_message_classes := (or .wrapper_message_classes "body-text text-column margin-y-lg flex-grow-1")}}
+{{ $wrapper_classes := (or .wrapper_classes "page-gutters position-fixed bottom-0 bg-white box-shadow-top width-100 d-flex justify-flex-end align-center")}}
+{{ $wrapper_message_classes := (or .wrapper_message_classes "body-text text-column")}}
 {{ $buttons_container_classes := (or .buttons_container_classes "d-flex justify-flex-end flex-shrink-0 margin-lg")}}
 {{ $accept_button_classes := (or .accept_button_classes "btn btn-outline-white margin-right-lg")}}
 {{ $decline_button_classes := (or .decline_button_classes "btn btn-outline-white")}}
 <div class="cookie-warning {{ $wrapper_classes }}" data-cookie-warning>
   <div class="cookie-warning-message {{ $wrapper_message_classes }}">
-    By clicking "Accept all cookies" you allow {{ .context.Site.Title }} to use cookies to track your usage of this site. Cookies are used to tailor your experience and monitor usage of our services. If you would prefer not to be tracked, click "Decline". You can learn more about how cookies are used on this site in our <a href="https://exatype.com/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>.
+    By clicking "Accept all cookies" you allow {{ .context.Site.Title }} to use cookies to track your usage of this site. Cookies are used to tailor your experience and monitor usage of our services. If you would prefer not to be tracked, click "Decline".
   </div>
   <div class="{{ $buttons_container_classes }}">
     <button class="{{ $accept_button_classes }}" data-cookie-consent="granted">{{ partial "hugo-sundries/svg/icons/cookie.svg" }}Accept</button>

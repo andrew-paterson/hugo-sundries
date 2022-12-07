@@ -1,0 +1,11 @@
+.cookie-warning-message {
+  margin: $spacer-lg 0;
+}
+@media (max-width: $mobile-menu-threshold) {
+  .cookie-warning {
+    flex-wrap: wrap;
+    .cookie-warning-message {
+      margin-bottom: 0;
+    }
+  }
+}
