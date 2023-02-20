@@ -33,30 +33,23 @@ if (hash) {
 }
 const scrollElementSelector = '#wrapper';
 
-const autoScrollEl = document.querySelector('[data-auto-scroll] [data-ac-panel-initially-open]');
-if (autoScrollEl) {
-  setTimeout(() => { // setTimeout causes the scroll to happen after the accordion hs finished opening.
-    scrollElementToTop(autoScrollEl);
-  });
-}
-
 function scrollElementToTop(currElement) {
   const parsedTitle = currElement.getAttribute('data-title-parsed');
-      window.location.hash = parsedTitle;
-      if (scrollElementSelector) {
-        const scrollElement = document.querySelector(scrollElementSelector);
-        const scrollElementRect = scrollElement.getBoundingClientRect();
-        const scrollElementPaddingTop = parseFloat(window.getComputedStyle(scrollElement, null).getPropertyValue('padding-top'));
-        scrollElement.scrollTop = currElement.offsetTop - scrollElementRect.top - scrollElementPaddingTop - 12;
-      } else {
-        currElement.scrollIntoView({behavior: 'smooth'});
-      }
+  window.location.hash = parsedTitle;
+  if (scrollElementSelector) {
+    const scrollElement = document.querySelector(scrollElementSelector);
+    const scrollElementRect = scrollElement.getBoundingClientRect();
+    const scrollElementPaddingTop = parseFloat(window.getComputedStyle(scrollElement, null).getPropertyValue('padding-top'));
+    const scrollValue = currElement.offsetTop - scrollElementRect.top - scrollElementPaddingTop - 12;
+    scrollElement.scrollTop = scrollValue;
+  } else {
+    currElement.scrollIntoView({behavior: 'smooth'});
+  }
 }
 
 const accordionObjects = accordionEls.map(accordionEl => {
   const options = {
     onOpen: (currElement) => {
-      console.log('test')
       scrollElementToTop(currElement);
     }
   }
@@ -81,6 +74,21 @@ const accordionObjects = accordionEls.map(accordionEl => {
     openOnInit: openOnInit,
   }
 });
-accordionObjects.forEach(accordionObject => {
-  new Accordion(accordionObject.accordionEl, accordionObject.options)
-})
+
+accordionEls.forEach(accordionEl => {
+  accordionEl.classList.add('opacity-0')
+});
+
+window.onload = (event) => {
+  accordionObjects.forEach(accordionObject => {
+    new Accordion(accordionObject.accordionEl, accordionObject.options);
+    const autoScrollEl = document.querySelector('[data-auto-scroll] [data-ac-panel-initially-open]');
+    if (autoScrollEl) {
+      scrollElementToTop(autoScrollEl);
+    }
+  });
+  accordionEls.forEach(accordionEl => {
+    accordionEl.classList.remove('opacity-0')
+  });
+
+};
