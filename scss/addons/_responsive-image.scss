@@ -4,7 +4,7 @@ $sizes: (25, 33, 50, 66, 100);
   margin-bottom: $spacer-lg;
   @each $size in $sizes {
     &.max-width-#{$size} {
-      $size: #{$size}#{"%"};
+      $size: #{$size}#{'%'};
       max-width: calc(#{$size} - #{$spacer-md});
       float: left;
       margin-right: $spacer-md;
@@ -13,16 +13,14 @@ $sizes: (25, 33, 50, 66, 100);
   @media (min-width: 980px) {
     @each $size in $sizes {
       &.desktop-max-width-#{$size} {
-        $size: #{$size}#{"%"};
+        $size: #{$size}#{'%'};
         max-width: calc(#{$size} - #{$spacer-md});
         float: left;
         margin-right: $spacer-md;
       }
     }
   }
-  + *:not(.responsive-image) {
-    clear: both;
-  }
+
   &.responsive-image-align-center {
     margin-left: auto;
     margin-right: auto;
@@ -32,6 +30,14 @@ $sizes: (25, 33, 50, 66, 100);
   &.responsive-image-align-right {
     float: right;
   }
+  &.responsive-image-wrap-text {
+    float: left;
+    margin-right: $spacer-lg;
+  }
+}
+
+.responsive-image:not(.responsive-image-wrap-text) + *:not(.responsive-image) {
+  clear: both;
 }
 
 .embedded-video {
