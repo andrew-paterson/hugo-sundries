@@ -1,5 +1,6 @@
 {{ $filepaths := slice}}
 {{- $gallery_path_static := printf "%s%s" "static" .gallery_path -}}
+
 {{- $static_path :=  $gallery_path_static -}}
 {{- $page_context := .context -}}
 {{- $gallery_path := .gallery_path -}}
@@ -15,6 +16,7 @@
 {{ if $gallery_list }}
   {{- $filepaths = $gallery_list }}
 {{ end }}
+<script>console.log({{ $filepaths }})</script>
   <div class="image-gallery" data-thumbnail-dimensions="{{ $thumbnail_aspect_ratio }}" data-infinity-image-loader>
       {{- range $filepaths -}}
         {{- $src := . -}}

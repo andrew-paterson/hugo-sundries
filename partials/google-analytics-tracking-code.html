@@ -1,28 +1,36 @@
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ .tracking_id }}"></script>
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id={{ .tracking_id }}"
+></script>
 <script>
-function hostMatch(host) {
-  const currentHostname = window.location.hostname;
-  if (host.endsWith('*')) {
-    return currentHostname.startsWith(host.substring(0, host.length - 1))
-  } else {
-    return currentHostname === host
+  function hostMatch(host) {
+    const currentHostname = window.location.hostname;
+    if (host.endsWith('*')) {
+      return currentHostname.startsWith(host.substring(0, host.length - 1));
+    } else {
+      return currentHostname === host;
+    }
   }
-}
-function isTrackableHost() {
-  const allowedHosts = ('{{ .allowed_hosts }}' || '').split(',');
-  return allowedHosts.find(host => hostMatch(host));
-}
-
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-if (isTrackableHost()) {
-  if (localStorage.getItem('cookieConsent') !== 'granted') {
-    gtag('consent', 'default', {
-      'analytics_storage': 'denied'
-    });
+  function isTrackableHost() {
+    const allowedHosts = ('{{ .allowed_hosts }}' || '').split(',');
+    return allowedHosts.find((host) => hostMatch(host));
   }
-  gtag('js', new Date());
 
-  gtag('config', '{{ .tracking_id }}');
-}
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  if (isTrackableHost()) {
+    if (localStorage.getItem('cookieConsent') !== 'granted') {
+      console.log('deny storage');
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+      });
+    }
+    gtag('js', new Date());
+
+    gtag('config', '{{ .tracking_id }}');
+    console.log(gtag);
+  }
 </script>
