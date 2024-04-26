@@ -11,6 +11,7 @@ function ancestorsWithClass(element, className) {
 }
 
 const accordionEls = Array.from(document.querySelectorAll('.accordion-container'));
+
 const hash = window.location.hash;
 if (hash) {
   accordionEls.forEach(accordionEl => {
@@ -88,7 +89,17 @@ window.onload = (event) => {
     }
   });
   accordionEls.forEach(accordionEl => {
-    accordionEl.classList.remove('opacity-0')
-  });
+    accordionEl.classList.remove('opacity-0');
+    const links = accordionEl.querySelectorAll('[data-accordion-link]');
+    for (let i = 0; i < links.length; i++) {
+      const link = links[i];
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        const attr = `[data-title-parsed=${link.getAttribute('href').replace('#', '')}]`;
+        const targetElement = document.querySelector(attr);
+        targetElement.querySelector('.ac-trigger').click();
 
+    })
+    }
+  })
 };
