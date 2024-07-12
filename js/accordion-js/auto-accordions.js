@@ -6,7 +6,7 @@ if (params.view !== 'plain') {
   viewSwitchLink.setAttribute('href', '?view=plain');
   viewSwitchLink.textContent = 'View as plain text';
   const autoAccordionEls = Array.from(document.querySelectorAll('.auto-accordion'));
-  autoAccordionEls.forEach(acc => {
+  autoAccordionEls.forEach((acc) => {
     const newAccGroup = document.createElement('div');
     newAccGroup.classList.add('accordion-container');
     newAccGroup.setAttribute('data-auto-scroll', true);
@@ -20,7 +20,14 @@ if (params.view !== 'plain') {
         currentAccItem = document.createElement('div');
         currentAccItem.classList.add('ac');
         currentAccItem.classList.add('js-enabled');
-        currentAccItem.setAttribute('data-title-parsed', el.textContent.replace(/\s/g, '-').replace(/-+/g, '-').replace(/[^0-9a-zA-Z_-]/g, '').toLowerCase());
+        currentAccItem.setAttribute(
+          'data-title-parsed',
+          el.textContent
+            .replace(/\s/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/[^0-9a-zA-Z_-]/g, '')
+            .toLowerCase()
+        );
         const headerEl = document.createElement('div');
         headerEl.classList.add('ac-header');
         const triggerEl = document.createElement('div');
@@ -44,12 +51,14 @@ if (params.view !== 'plain') {
           newAccGroup.appendChild(el);
         }
       }
-      acc.appendChild(newAccGroup)
+      acc.appendChild(newAccGroup);
     });
-  })
+  });
 } else {
   viewSwitchLink.setAttribute('href', '?view=interactive');
   viewSwitchLink.textContent = 'Interactive version';
 }
 const viewSwitchLinkContainer = document.querySelector('.view-switch-links');
-viewSwitchLinkContainer.appendChild(viewSwitchLink);
+if (viewSwitchLinkContainer) {
+  viewSwitchLinkContainer.appendChild(viewSwitchLink);
+}
