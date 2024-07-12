@@ -10,7 +10,6 @@
     if (typeof gtag !== 'function') {
       return;
     }
-    console.log(localStorage.getItem('cookieConsent'));
     if (localStorage.getItem('cookieConsent') === 'granted') {
       gtag('consent', 'update', {
         analytics_storage: 'granted',

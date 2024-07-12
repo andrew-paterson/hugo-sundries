@@ -48,8 +48,8 @@ function getScrollParent(node) {
 function scrollElementToTop(currElement) {
   const parsedTitle = currElement.getAttribute('data-title-parsed');
   window.location.hash = parsedTitle;
-  if (scrollElementSelector) {
-    const scrollElement = getScrollParent(currElement);
+  const scrollElement = getScrollParent(currElement);
+  if (scrollElement) {
     const scrollElementRect = scrollElement.getBoundingClientRect();
     const scrollElementPaddingTop = parseFloat(window.getComputedStyle(scrollElement, null).getPropertyValue('padding-top'));
     const scrollValue = currElement.offsetTop - scrollElementRect.top - scrollElementPaddingTop - 12;

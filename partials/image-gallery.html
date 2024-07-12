@@ -16,7 +16,6 @@
 {{ if $gallery_list }}
   {{- $filepaths = $gallery_list }}
 {{ end }}
-<script>console.log({{ $filepaths }})</script>
   <div class="image-gallery" data-thumbnail-dimensions="{{ $thumbnail_aspect_ratio }}" data-infinity-image-loader>
       {{- range $filepaths -}}
         {{- $src := . -}}
