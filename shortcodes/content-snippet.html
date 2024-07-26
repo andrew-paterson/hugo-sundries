@@ -1,1 +1,1 @@
-{{ $snippets := .Site.GetPage "/content-snippets" }} {{ range where $snippets.Resources "Params.snippet_name" ( .Get "snippet_name" )}} {{ .Content }} {{ end }}
+{{ $snippets_path := or ( .Get "content_snippets_path" ) .Site.Params.content_snippets_path "/content-snippets" }} {{ $snippets := .Site.GetPage $snippets_path }} {{ range where $snippets.Resources "Params.snippet_name" ( .Get "snippet_name" )}} {{ .Content }} {{ end }}
