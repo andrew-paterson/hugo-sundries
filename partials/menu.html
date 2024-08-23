@@ -1,62 +1,87 @@
 <ul class="custom-menu menu level-1">
-    {{ $currentPage := . }}
-    {{ range .menu }}
-      {{ if .HasChildren }}
-        <li class="parent {{ .Params.class }}">
-          {{ if .URL }}
-            <a href="{{ .URL }}">
-              {{ .Pre }}
-              {{ .Name }}
-            </a>
-          {{ else }}
-            {{ .Pre }}
-            <span>{{ .Name }}</span>
-          {{ end }}
-          <ul class="menu level-2">
-            {{ range .Children }}
-            <li class=" {{ .Params.class }}">
-              {{ if .URL }}
-                <a href="{{ .URL }}">
-                  {{ .Pre }}
-                  {{ .Name }}
-                </a>
-              {{ else }}
-                {{ .Pre }}
-                <span>{{ .Name }}</span>
-              {{ end }}
-              {{ if .HasChildren }}
-              <ul class="menu level-3">
-                {{ range .Children }}
-                  <li class=" {{ .Params.class }}">
-                    {{ if .URL }}
-                      <a href="{{ .URL }}">
-                        {{ .Pre }}
-                        {{ .Name }}
-                      </a>
-                    {{ else }}
-                      {{ .Pre }}
-                      <span>{{ .Name }}</span>
-                    {{ end }}
-                  </li>
-                {{ end }}
-                </ul>
-              {{ end }}
-            </li>
-            {{ end }}
-          </ul>
-        </li>
-      {{ else }}
-        <li class="{{ .Params.class }}">
-          {{ if .URL }}
-            <a href="{{ .URL }}">
-              {{ .Pre }}
-              {{ .Name }}
-            </a>
-          {{ else }}
-            {{ .Pre }}
-            <span>{{ .Name }}</span>
-          {{ end }}
-        </li>
-      {{ end }}
+  {{ $currentPage := . }} {{ range .menu }} {{ if .HasChildren }}
+  <li class="parent {{ .Params.class }}">
+    {{ if .URL }}
+    <a
+      href="{{ .URL }}"
+      {{
+      if
+      .Params.target
+      }}{{
+      if
+      .Params.target
+      }}target="{{ .Params.target }}"
+      {{end
+      }}
+      {{end
+      }}
+    >
+      {{ .Pre }} {{ .Name }}
+    </a>
+    {{ else }} {{ .Pre }}
+    <span>{{ .Name }}</span>
     {{ end }}
-  </ul>
+    <ul class="menu level-2">
+      {{ range .Children }}
+      <li class=" {{ .Params.class }}">
+        {{ if .URL }}
+        <a
+          href="{{ .URL }}"
+          {{
+          if
+          .Params.target
+          }}target="{{ .Params.target }}"
+          {{end
+          }}
+        >
+          {{ .Pre }} {{ .Name }}
+        </a>
+        {{ else }} {{ .Pre }}
+        <span>{{ .Name }}</span>
+        {{ end }} {{ if .HasChildren }}
+        <ul class="menu level-3">
+          {{ range .Children }}
+          <li class=" {{ .Params.class }}">
+            {{ if .URL }}
+            <a
+              href="{{ .URL }}"
+              {{
+              if
+              .Params.target
+              }}target="{{ .Params.target }}"
+              {{end
+              }}
+            >
+              {{ .Pre }} {{ .Name }}
+            </a>
+            {{ else }} {{ .Pre }}
+            <span>{{ .Name }}</span>
+            {{ end }}
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </li>
+      {{ end }}
+    </ul>
+  </li>
+  {{ else }}
+  <li class="{{ .Params.class }}">
+    {{ if .URL }}
+    <a
+      href="{{ .URL }}"
+      {{
+      if
+      .Params.target
+      }}target="{{ .Params.target }}"
+      {{end
+      }}
+    >
+      {{ .Pre }} {{ .Name }}
+    </a>
+    {{ else }} {{ .Pre }}
+    <span>{{ .Name }}</span>
+    {{ end }}
+  </li>
+  {{ end }} {{ end }}
+</ul>
