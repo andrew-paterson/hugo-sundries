@@ -1,32 +1,13 @@
-{{- $image_path := ( or (.Get "image_path") "") -}}
-{{ $sizes := (or (.Get "sizes") (partial "hugo-sundries/fallback-srcset-sizes.html" . ))}}
-{{- $caption := (.Get "caption") -}}
-{{- $image_link := (.Get "image_link") -}}
-{{- $image_link_class := (.Get "image_link_class") -}}
-{{- $class := (.Get "class") }}
-{{- $class = (print $class " responsive-image") }}
-{{- if (.Get "max_width") -}}
-  {{ $max_width_num := strings.TrimSuffix "%" (.Get "max_width") }}
-  {{- $class = (print $class " max-width-" $max_width_num) }}
-{{- end -}}
-{{- if (.Get "desktop_max_width") -}}
-  {{ $desktop_max_width_num := strings.TrimSuffix "%" (.Get "desktop_max_width") }}
-  {{- $class = (print $class " desktop-max-width-" $desktop_max_width_num) }}
-{{- end -}}
-{{- if (.Get "align") -}}
-  {{- $class = (print $class " responsive-image-align-" (.Get "align")) }}
-{{- end -}}
-{{- if (.Get "wrap_text") -}}
-  {{- $class = (print $class " responsive-image-wrap-text") }}
-{{- end -}}
-{{ if gt (len $image_path) 0 }}
-{{- if $caption -}}<figure class="{{ $class }}">{{- end -}}
-{{- if $image_link -}}<a href="{{ $image_link }}" class={{ $image_link_class }}>{{- end -}}
-<img srcset="{{ partial "hugo-sundries/srcset-from-manifest.html" (dict "context" . "image_path" $image_path)}}"
-src="{{ $image_path }}" {{ if $sizes }}sizes="{{ $sizes }}"{{ end }} {{ if (.Get "alt") }}alt="{{ (.Get "alt") }}"{{ end }} {{ if (.Get "title") }}title="{{ (.Get "title") }}"{{ end }} {{ if (.Get "data_dimensions") }}data-dimensions="{{ (.Get "data_dimensions") }}"{{ end }} {{ if (.Get "data_object_fit") }}data-object-fit="{{ (.Get "data_object_fit") }}"{{ end }} {{ if (and $class (not $caption) )}}class="{{ $class }}"{{ end }} {{ (.Get "img_attrs") | safeHTMLAttr }} />
-{{- if $image_link -}}</a>{{- end -}}
-{{- if $caption -}}
-<figcaption>{{ $caption }}</figcaption>
+{{- $image_path := ( or (.Get "image_path") "") -}} {{ $sizes := (or (.Get "sizes") (partial "hugo-sundries/fallback-srcset-sizes.html" . ))}} {{- $caption := (.Get "caption") -}} {{- $image_link := (.Get "image_link") -}} {{- $image_link_class := (.Get "image_link_class") -}} {{- $class := (.Get "class") }} {{- $class = (print $class " responsive-image") }} {{- if (.Get "max_width") -}} {{ $max_width_num := strings.TrimSuffix "%" (.Get "max_width") }} {{- $class = (print $class " max-width-" $max_width_num) }} {{- end -}} {{- if (.Get "desktop_max_width") -}} {{ $desktop_max_width_num := strings.TrimSuffix "%" (.Get "desktop_max_width") }} {{- $class = (print $class " desktop-max-width-" $desktop_max_width_num) }} {{- end -}} {{- if (.Get "align") -}} {{- $class = (print $class "
+responsive-image-align-" (.Get "align")) }} {{- end -}} {{- if (.Get "wrap_text") -}} {{- $class = (print $class " responsive-image-wrap-text") }} {{- end -}} {{ if gt (len $image_path) 0 }} {{- if $caption -}}
+<figure class="{{ $class }}">
+  {{- end -}} {{- if $image_link -}}<a
+    href="{{ $image_link }}"
+    class="{{"
+    $image_link_class
+    }}
+    >{{- end -}} <img srcset="{{ partial "hugo-sundries/srcset-from-manifest.html" (dict "context" . "image_path" $image_path)}}" src="{{ $image_path }}" {{ if $sizes }}sizes="{{ $sizes }}"{{ end }} {{ if (.Get "alt") }}alt="{{ (.Get "alt") }}"{{ end }} {{ if (.Get "title") }}title="{{ (.Get "title") }}"{{ end }} {{ if (.Get "data_dimensions") }}data-dimensions="{{ (.Get "data_dimensions") }}"{{ end }} {{ if (.Get "data_object_fit") }}data-object-fit="{{ (.Get "data_object_fit") }}"{{ end }} {{ if (and $class (not $caption) )}}class="{{ $class }}"{{ end }} {{ (.Get "img_attrs") | safeHTMLAttr }} /> {{- if $image_link -}}</a
+  >{{- end -}} {{- if $caption -}}
+  <figcaption>{{ $caption | markdownify }}</figcaption>
 </figure>
-{{- end -}}
-{{ end }}
+{{- end -}} {{ end }}
